@@ -1,7 +1,7 @@
 {
-    "name": "@geschool/starter",
+    "name": "@fitness/starter",
     "version": "13.5.0",
-    "description": "Geschool, Application de gestion des enseignements sécondaire",
+    "description": "Fitness, Application de gestion des abonnés d'une salle de sport",
     "author": "https://linkedin.com/dao-hamadou",
     "license": "https://linkedin.com/dao-hamadou",
     "private": true,
