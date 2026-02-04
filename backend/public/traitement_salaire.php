@@ -1,0 +1,1 @@
+<?php shell_exec('..\cmd\crexport.exe -U lycee -P lycee -D lycee -F documents\TRAITEMENT_SALAIRE.rpt -a "annee_id:2023" -a "mois:5" -O temp\TRAITEMENT_SALAIRE.pdf -E pdf -l'); ?>

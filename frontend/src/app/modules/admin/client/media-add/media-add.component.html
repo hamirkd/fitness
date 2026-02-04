@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Ajouter un document</h2>
+<mat-dialog-content class="  sm:p-6 w-200">
+    <form class=" " [formGroup]="mediaForm">
+        <div class="flex flex-col w-full ">
+            <div class="flex">
+                <mat-form-field class="w-full">
+                    <mat-label>Libelle document</mat-label>
+                    <input matInput [formControlName]="'libelle_document'" required>
+                </mat-form-field>
+            </div>
+            <div class="flex flex-col">
+                <mat-label>Fichier joint</mat-label>
+                <input id="file-input" class="w-full" type="file" [multiple]="false" #docFileInput>
+            </div>
+        </div>
+    </form>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close cdkFocusInitial>Annuler</button>
+    <button mat-button (click)="onSubmit(docFileInput.files)" [disabled]="!mediaForm.valid">
+        <mat-icon style="color: white;" svgIcon="iconsmind:refresh" class="animate-spin-slow" *ngIf="data['btnsubmit']"></mat-icon> &nbsp; {{action=='new'?'Enregister':'Modifier'}}</button>
+</mat-dialog-actions>

@@ -1,0 +1,75 @@
+<h2 mat-dialog-title>Modifier mon profil</h2>
+<mat-dialog-content class="  sm:p-6 w-200">
+
+
+    <form class=" " [formGroup]="utilisateurForm">
+        <div class="flex flex-col w-full ">
+            <div class="flex">
+                <mat-form-field class="w-1/2 pr-1">
+                    <mat-label>Nom</mat-label>
+                    <input matInput [formControlName]="'last_name'" required>
+                    <mat-error *ngIf="utilisateurForm.get('last_name').hasError('required')">
+                        Nom Obligatoire
+                    </mat-error>
+                    <mat-error *ngIf="utilisateurForm.get('last_name').hasError('minlength')">
+                        Le nom doit dépasser 2 caractères
+                    </mat-error>
+                    <mat-error *ngIf="utilisateurForm.get('last_name').hasError('maxlength')">
+                        Le nom ne doit pas dépasser 100 caractères
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="w-1/2 pr-1">
+                    <mat-label>Prénom(s)</mat-label>
+                    <input matInput [formControlName]="'first_name'" required>
+                    <mat-error *ngIf="utilisateurForm.get('first_name').hasError('required')">
+                        Prénom Obligatoire
+                    </mat-error>
+                    <mat-error *ngIf="utilisateurForm.get('first_name').hasError('minlength')">
+                        Le prénom doit dépasser 2 caractères
+                    </mat-error>
+                    <mat-error *ngIf="utilisateurForm.get('first_name').hasError('maxlength')">
+                        Le prénom ne doit pas dépasser 100 caractères
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="flex">
+                <mat-form-field class="w-1/2 pr-1">
+                    <mat-label>E-mail</mat-label>
+                    <input matInput [formControlName]="'email'" required>
+                    <mat-error *ngIf="utilisateurForm.get('email').hasError('required')">
+                        E-mail obligatoire
+                    </mat-error>
+                    <mat-error *ngIf="existingEmail.value">
+                        cet E-mail a déja été pris en compte.
+                    </mat-error>
+                    <mat-error *ngIf="utilisateurForm.get('email').hasError('email')">
+                        Svp, veuillez entrer un e-mail valide
+                    </mat-error>
+                    <mat-error *ngIf="utilisateurForm.get('email').hasError('maxlength')">
+                        Le prénom ne doit pas dépasser 100 caractères
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="w-1/2 pr-1">
+                    <mat-label>Téléphone</mat-label>
+                    <input matInput [formControlName]="'telephone'">
+                    <mat-error *ngIf="utilisateurForm.get('telephone').hasError('required')">
+                        Téléphone obligatoire
+                    </mat-error>
+                    <mat-error *ngIf="utilisateurForm.get('telephone').hasError('minlength')">
+                        Le numéro de téléphone doit dépasser 2 caractères
+                    </mat-error>
+                    <mat-error *ngIf="utilisateurForm.get('telephone').hasError('maxlength')">
+                        Le numéro de téléphone ne doit pas dépasser 18 caractères
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close cdkFocusInitial>Annuler</button>
+    <button mat-button (click)="onSubmit()" [disabled]="!utilisateurForm.valid">
+       Modifier</button>
+</mat-dialog-actions>

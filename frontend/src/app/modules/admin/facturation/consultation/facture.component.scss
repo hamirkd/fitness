@@ -1,0 +1,15 @@
+.mat-row .mat-cell {
+    cursor: pointer;
+}
+
+.mat-row:hover .mat-cell {
+    background-color: #e2e8f0;
+}
+
+.mat-column-actions {
+    width: 15%;
+    max-width: 15%;
+    border-right: 1px solid currentColor;
+    padding-right: 24px;
+    text-align: center;
+}

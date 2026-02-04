@@ -1,0 +1,136 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <!-- Main -->
+    <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+        <div class="flex flex-col w-full">
+
+            <div class="mt-2 text-4xl sm:text-2xl font-extrabold tracking-tight leading-tight">
+                Mon profil
+            </div>
+            <!-- Form -->
+            <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                <!-- Alert -->
+                <fuse-alert class="mb-8" *ngIf="alert" [type]="alert.type" [showIcon]="false">
+                    {{alert.message}}
+                </fuse-alert>
+                <div class="space-y-1 flex">
+
+
+                    <div class="flex flex-col w-2/3">
+                        <div class="mb-6 flex">
+                            <div class="text-2xl font-bold tracking-tight w-1/2">Information personnelle</div>
+
+                            <div class="ml-auto -mt-2 w-1/2 text-left">
+                                <button mat-icon-button (click)="editer()">
+                                    <mat-icon
+                                        class="icon-size-5"
+                                        [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex flex-col w-full">
+                            <div class="flex pt-6">
+                                <div class="w-1/2 pr-2">
+                                    <label class="w-1/2">Nom : </label>
+                                    <label class="w-1/2">{{user?.last_name}}</label>
+                                </div>
+                                <div class="w-1/2 pr-l">
+                                    <label class="w-1/2">E-mail : </label>
+                                    <label class="w-1/2">{{user?.email}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col w-full">
+                            <div class="flex pt-6">
+                                <div class="w-1/2 pr-l">
+                                    <label class="w-1/2">Prénom(s) : </label>
+                                    <label class="w-1/2">{{user?.first_name}}</label>
+                                </div>
+                                <div class="w-1/2 pr-2">
+                                    <label class="w-1/2">Téléphone : </label>
+                                    <label class="w-1/2">{{user?.telephone}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col w-1/3">
+                        <div class="mb-6 flex">
+                            <div class="ml-auto -mt-2 w-1/2 text-left">
+                                <button mat-icon-button (click)="toggleEditMode()">
+                                    <mat-icon
+                                        class="icon-size-5"
+                                        [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col w-full" *ngIf="editMode">
+                            <div class="flex flex-auto items-end -mt-16">
+                                <div class="relative flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card">
+                                    <!-- Upload / Remove avatar -->
+                                    <div class="absolute inset-0 flex items-center justify-center z-20">
+                                        <div>
+                                            <input id="avatar-file-input" class="absolute h-0 w-0 opacity-0 invisible pointer-events-none" type="file" [multiple]="false" [accept]="'image/jpeg, image/png'" (change)="uploadAvatar(avatarFileInput.files)" #avatarFileInput>
+                                            <label class="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-hover" for="avatar-file-input" matRipple>
+                                        <mat-icon
+                                            class="text-white"
+                                            [svgIcon]="'heroicons_outline:camera'"></mat-icon>
+                                    </label>
+                                        </div>
+                                        <div>
+                                            <button mat-icon-button (click)="removeAvatar()">
+                                        <mat-icon
+                                            class="text-white"
+                                            [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                                    </button>
+                                        </div>
+                                    </div>
+                                    <!-- Image/Letter -->
+                                    <img class="object-cover w-full h-full" *ngIf="user?.avatar" [src]="'api/auth/getAvatar?token='+token+'&&avatar'+user?.avatar">
+                                    <div class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200" *ngIf="!user?.avatar">
+                                        {{user.last_name.charAt(0)}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col w-full" *ngIf="!editMode">
+                            <div class="flex flex-auto items-end -mt-16">
+                                <!-- Avatar -->
+                                <div class="flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card">
+                                    <img class="object-cover w-full h-full" *ngIf="user?.avatar" [src]="'api/auth/getAvatar?token='+token+'&&avatar'+user?.avatar">
+                                    <div class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200" *ngIf="!user?.avatar">
+                                        {{user?.last_name?.charAt(0)}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="flex items-center justify-between w-full">
+
+                <div class="flex items-center mt-6">
+                    <button class="hidden sm:inline-flex ml-3" mat-flat-button [color]="'primary'" (click)="editerPassword()">
+                        <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:cog'"></mat-icon>
+                        <span class="ml-2">Changer de mot de passe</span>
+                    </button>
+
+                    <!-- Actions menu (visible on xs) -->
+                    <div class="sm:hidden">
+                        <button [matMenuTriggerFor]="actionsMenu" mat-icon-button>
+                            <mat-icon [svgIcon]="'heroicons_outline:dots-vertical'"></mat-icon>
+                        </button>
+                        <mat-menu #actionsMenu="matMenu">
+                            <button mat-menu-item>Changer de mot de passe</button>
+                        </mat-menu>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

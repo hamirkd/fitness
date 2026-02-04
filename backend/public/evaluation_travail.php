@@ -1,0 +1,1 @@
+<?php shell_exec('..\cmd\crexport.exe -U lycee -P lycee -D lycee -F documents\EVALUATION_TRAVAIL.rpt -a "annee_id:2023" -a "trimestre:T3" -O temp\EVALUATION_TRAVAIL.pdf -E pdf -l'); ?>

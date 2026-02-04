@@ -1,0 +1,120 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between pr-6 pl-6 pt-1 pb-1   sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Breadcrumbs -->
+            <div class="flex flex-wrap items-center font-medium">
+                <div>
+                    <a class="whitespace-nowrap text-primary-500" [routerLink]="['/dashboard']" routerLinkActive="router-link-active">Tableau de board</a>
+                </div>
+                <div class="flex items-center ml-1 whitespace-nowrap">
+                    <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
+                    <a class="whitespace-nowrap text-primary-500" [routerLink]="['/client']" routerLinkActive="router-link-active">Clients</a>
+                </div>
+                <div class="flex items-center ml-1 whitespace-nowrap">
+                    <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
+                    <a class="ml-1 text-default-500">client</a>
+                </div>
+            </div>
+            <!-- Title -->
+        </div>
+    </div>
+
+    <div class="flex-auto p-6 sm:p-10">
+        <div class="flex w-full min-w-0">
+
+            <div class="flex flex-col w-full">
+                <div class="flex">
+                    <mat-form-field class="w-1/3">
+                        <mat-label>Rechercher</mat-label>
+                        <input matInput (ngModelChange)="recherche($event)" [formControl]="searchControl" [placeholder]="'Search for a page or a contact'">
+                    </mat-form-field>
+
+                    <div class="w-2/3 text-right items-center">
+
+                        <button class="shadow rounded-2xl overflow-hidden cursor-pointer mt-2 ml-2 bg-card  bg-red-900" mat-stroked-button (click)="ajouter()">
+                            <mat-icon style="color: white;" svgIcon="iconsmind:add"></mat-icon> &nbsp;
+                            <label class="ml-0 cursor-pointer" style="color: white;">Ajouter</label>
+                        </button>
+                        <button class="shadow rounded-2xl overflow-hidden cursor-pointer mt-2 ml-2 bg-card  bg-green-900" mat-stroked-button (click)="exporter()">
+                                    <mat-icon style="color: white;" svgIcon="iconsmind:printer"></mat-icon> &nbsp;
+                                    <label class="ml-0 cursor-pointer" style="color: white;">Exporter</label>
+                                </button>
+                    </div>
+                </div>
+
+                <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z1 w-full">
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+                        <td mat-cell *matCellDef="let element;let i=index">{{dataSource.paginator.pageIndex*dataSource.paginator.pageSize+i+1}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="numerocompteur">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Compteur </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.numerocompteur}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="nomprenom">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom </th>
+                        <td mat-cell *matCellDef="let element">
+                            <a class="whitespace-nowrap text-primary-500" [routerLink]="['/client/show/'+element.id]" routerLinkActive="router-link-active">{{element.nom}} {{element.prenom}}</a>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="genre">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Genre </th>
+                        <td mat-cell *matCellDef="let element"> 
+                            <span *ngIf="element.genre == 'HOMME'" class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                {{ element.genre|translate }}
+                            </span>
+                            <span *ngIf="element.genre == 'FEMME'" class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50">
+                                {{ element.genre|translate }}
+                            </span>
+                            </td>
+
+                    </ng-container>
+
+                    <ng-container matColumnDef="telephone">
+                        <th mat-header-cell *matHeaderCellDef> Telephone </th>
+                        <td mat-cell *matCellDef="let element"> {{element.telephone}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="cnib">
+                        <th mat-header-cell *matHeaderCellDef> CNIB </th>
+                        <td mat-cell *matCellDef="let element"> {{element.cnib}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="email">
+                        <th mat-header-cell *matHeaderCellDef> E-mail </th>
+                        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="typeclient">
+                        <th mat-header-cell *matHeaderCellDef> Type </th>
+                        <td mat-cell *matCellDef="let element">
+                            
+                            <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50">{{ element.typeclient|translate }}</span> </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef> Actions </th>
+
+                        <td mat-cell *matCellDef="let element" class="text-justify">
+                            <button class="hidden sm:inline-flex ml-3" mat-icon-button (click)="editer(element)">
+                                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon> 
+                            </button>
+                            <button class="hidden sm:inline-flex ml-3" mat-icon-button (click)="supprimer(element)">
+                                <mat-icon svgIcon="heroicons_solid:x"></mat-icon> 
+                            </button>
+
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let element;let row; columns: displayedColumns;"></tr>
+                </table>
+                <mat-paginator (page)="handlePageEvent($event)" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 40, 100]" aria-label="Select page" [showFirstLastButtons]="true"></mat-paginator>
+            </div>
+
+        </div>
+    </div>
+
+</div>
