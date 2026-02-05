@@ -20,4 +20,9 @@ Route::get('/', function () {
 // Route::get('/login', function () {
 //     return view('admin/admin-user/index');
 // });
-Route::get('qr-code', [QRCodeController::class, 'index']);
+// Route::get('web/qr-code', [QRCodeController::class, 'index']);
+Route::group([
+    'prefix' => 'web'
+], function ($router) {
+    Route::get('qr-code', [QRCodeController::class, 'index']);
+});

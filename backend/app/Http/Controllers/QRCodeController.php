@@ -16,7 +16,7 @@ class QRCodeController extends Controller
     {
        //return QrCode::SMS('121-222-6666', 'Body of the message');
 
-        return QrCode::size(300)->generate(uniqid());
+        return QrCode::size(400)->generate(uniqid());
         // $image = QrCode::format('png')
         //                  ->merge(public_path('images/logo.png'), 0.5, true)
         //                  ->size(500)
