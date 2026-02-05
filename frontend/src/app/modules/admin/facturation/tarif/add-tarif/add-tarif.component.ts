@@ -11,7 +11,7 @@ import { Tarif } from 'app/models/tarif.model';
     styleUrls: ['./add-tarif.component.scss'],
 })
 export class AddTarifComponent implements OnInit {
-    @Input() name;
+    @Input() name: any;
 
     tarif: Tarif;
     action: 'edit' | 'new' = 'new';
@@ -42,11 +42,12 @@ export class AddTarifComponent implements OnInit {
     createTarifForm(): FormGroup {
         return this._formBuilder.group({
             id: [this.tarif.id],
-            typetarif: [this.tarif.typetarif],
+            code: [this.tarif.code],
             montant: [this.tarif.montant],
-            redevance: [this.tarif.redevance],
-            autres_frais: [this.tarif.autres_frais],
+            libelle: [this.tarif.libelle],
+            duree: [this.tarif.duree],
         });
+
     }
     
     onSubmit() {

@@ -25,16 +25,16 @@ export class TarifComponent implements OnInit {
 
   dataSource: MatTableDataSource<Tarif> = new MatTableDataSource();
 
-  displayedColumns: string[] = [
-      'typetarif',
-      'montant',
-      'redevance',
-      'autres_frais',
-      'creation',
-      'actions',
-  ];
+    displayedColumns: string[] = [
+        'code',
+        'libelle',
+        'montant',
+        'duree',
+        'creation',
+        'actions',
+    ];
 
-  recherche(textRecherche) {
+  recherche(textRecherche: string) {
       textRecherche = textRecherche.trim(); // Remove whitespace
       textRecherche = textRecherche.toLowerCase(); // MatTableDataSource defaults to lowercase matches
       this.dataSource.filter = textRecherche;
@@ -51,7 +51,7 @@ export class TarifComponent implements OnInit {
       })
   }
   
-  editer(tarif): void
+  editer(tarif:Tarif): void
   {
       this.dialogRef = this._matDialog.open(AddTarifComponent, {
           panelClass: '',
@@ -105,10 +105,10 @@ export class TarifComponent implements OnInit {
             }
         },
         message:
-            'Voulez-vous supprimer le tarif N ' + element.typetarif + ' ?',
+            'Voulez-vous supprimer le tarif N ' + element.libelle + ' ?',
     });
 
-    this.dialogRef.afterClosed().subscribe((response) => {
+    this.dialogRef.afterClosed().subscribe((response:any) => {
         if (response === 'confirmed') {
             //***DELETE ONE */
             this._tarifService.delete(element).subscribe((data) => {

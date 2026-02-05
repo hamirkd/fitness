@@ -19,6 +19,8 @@ import {  TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import {  TranslateHttpLoader } from '@ngx-translate/http-loader';
 import localeFr from '@angular/common/locales/fr';
 import { registerLocaleData } from '@angular/common';
+import { QRCodeModule } from 'angularx-qrcode';
+
 registerLocaleData(localeFr); // Enregistre la locale française
 
 
@@ -38,6 +40,7 @@ export function createTranslateLoader(http: HttpClient) {
     ],
     imports     : [
         BrowserModule,
+        QRCodeModule,
         BrowserAnimationsModule,NgxCsvParserModule,
         RouterModule.forRoot(appRoutes, routerConfig),
         
@@ -65,7 +68,7 @@ export function createTranslateLoader(http: HttpClient) {
               useFactory: (createTranslateLoader),
               deps: [HttpClient]
             }
-          })
+          }),
     ],
     bootstrap   : [
         AppComponent

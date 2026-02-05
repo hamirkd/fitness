@@ -75,9 +75,9 @@ export const appRoutes: Route[] = [
         children   : [
             {path: 'example', loadChildren: () => import('app/modules/admin/example/example.module').then(m => m.ExampleModule)},
             {path: 'dashboard', loadChildren: () => import('app/modules/admin/dashboard/dashboard.module').then(m => m.DashboardModule)},
-            {path: 'facturation', loadChildren: () => import('app/modules/admin/facturation/facturation.module').then(m => m.ScolariteModule)},
+            {path: 'facturation', loadChildren: () => import('app/modules/admin/facturation/index.module').then(m => m.IndexAbonnementModule)},
             {path: 'utilisateur', loadChildren: () => import('app/modules/admin/utilisateur/utilisateur.module').then(m => m.UtilisateurModule)},
-            {path: 'client', loadChildren: () => import('app/modules/admin/client/client.module').then(m => m.ClientModule)},
+            {path: 'abonnes', loadChildren: () => import('app/modules/admin/abonne/abonne.module').then(m => m.AbonneModule)},
             {path: 'mon-profil', loadChildren: () => import('app/modules/admin/mon-profil/mon-profil.module').then(m => m.MonProfilModule)},
         ]
     }

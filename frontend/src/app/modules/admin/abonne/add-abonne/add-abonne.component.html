@@ -1,0 +1,76 @@
+<h2 mat-dialog-title>{{action=='new'?'Ajouter un abonne':'Modifier le abonne '+abonne.nom+' '+abonne.prenom}}</h2>
+<mat-dialog-content class="  sm:p-6 w-full">
+
+
+    <form class=" " [formGroup]="abonneForm">
+        <div class="flex flex-col w-full ">
+
+            <div class="flex">
+
+                <mat-form-field class="w-1/3 pr-2">
+                    <mat-label>Nom</mat-label>
+                    <input matInput [formControlName]="'nom'" required>
+                </mat-form-field>
+
+                <mat-form-field class="w-1/3 pl-2 pr-2">
+                    <mat-label>Prénom(s)</mat-label>
+                    <input matInput [formControlName]="'prenom'" required>
+                </mat-form-field>
+
+            </div>
+            <div class="flex">
+
+                <mat-form-field class="w-1/3 pr-2">
+                    <mat-label>Genre</mat-label>
+                    <mat-select [formControlName]="'genre'" required>
+                        <mat-option [value]="'HOMME'">HOMME</mat-option>
+                        <mat-option [value]="'FEMME'">FEMME</mat-option>
+                        <mat-option [value]="'NONPRECIS'">NON PRECIS</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="flex">
+                <mat-form-field class="w-1/3 pr-2">
+                    <mat-label>Date naissance</mat-label>
+                    <input type="date" matInput [formControlName]="'datenais'">
+                </mat-form-field>
+                <mat-form-field class="w-1/3 pl-2 pr-2">
+                    <mat-label>Age</mat-label>
+                    <input type="text" matInput [formControlName]="'age'">
+                </mat-form-field>
+
+            </div>
+ 
+
+            <div class="flex">
+                <mat-form-field class="w-1/3 pr-2">
+                    <mat-label>Téléphone</mat-label>
+                    <input matInput [formControlName]="'telephone'">
+                </mat-form-field>
+
+                <mat-form-field class="w-1/3 pl-2">
+                    <mat-label>E-mail</mat-label>
+                    <input matInput [formControlName]="'email'">
+                </mat-form-field>
+                <mat-form-field class="w-1/3 pl-2">
+                    <mat-label>Cnib</mat-label>
+                    <input matInput [formControlName]="'cnib'">
+                </mat-form-field>
+
+            </div>
+            <div class="flex">
+                <mat-form-field class="w-2/3 pr-2">
+                    <mat-label>Observation</mat-label>
+
+                    <textarea matInput [formControlName]="'observation'"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close cdkFocusInitial>Annuler</button>
+    <button mat-button (click)="onSubmit()" [disabled]="!abonneForm.valid">
+        {{action=='new'?'Enregister':'Modifier'}}</button>
+</mat-dialog-actions>

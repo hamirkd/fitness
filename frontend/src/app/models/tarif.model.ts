@@ -2,15 +2,15 @@ export class Tarif {
 
     id:number
     montant:string
-    redevance:number
-    autres_frais:number
-    typetarif:number
-
-    constructor(tarif) {
+    duree:number
+    code:string
+    libelle:string
+    constructor(tarif: any) {
         this.id = tarif.id
-        this.redevance = tarif.redevance
+        this.duree = tarif.duree
         this.montant = tarif.montant
-        this.autres_frais = tarif.autres_frais
-        this.typetarif = tarif.typetarif
+        this.code = tarif.code
+        this.duree = tarif.duree
+        this.libelle = tarif.libelle
     }
 }
