@@ -48,9 +48,29 @@ class MediaController extends Controller
 
     
 
-    public function getDocument($id){
+    // public function getDocument($id){
+    //     $media = Media::find($id);
+    //     return response()->file('..\storage\app\public\uploads\\'.$media->type_documents.'\\'.$media->file_name);
+    // }
+    public function getDocument($id)
+    {
         $media = Media::find($id);
-        return response()->file('..\storage\app\public\uploads\\'.$media->type_documents.'\\'.$media->file_name);
+
+        if (!$media) {
+            return response()->json([
+                'message' => 'Média introuvable'
+            ], 404);
+        }
+
+        $path = 'uploads/' . $media->type_documents . '/' . $media->file_name;
+
+        if (!Storage::disk('public')->exists($path)) {
+            return response()->json([
+                'message' => 'Fichier non trouvé sur le serveur'
+            ], 404);
+        }
+
+        return Storage::disk('public')->response($path);
     }
 
     
@@ -98,7 +118,27 @@ class MediaController extends Controller
     public function destroy($media_id)
     {
         $media = Media::find($media_id);
-        return $media->delete();
+
+        if (!$media) {
+            return response()->json([
+                'message' => 'Média introuvable'
+            ], 404);
+        }
+
+        $path = 'uploads/' . $media->type_documents . '/' . $media->file_name;
+
+        // Supprimer le fichier s'il existe
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
+
+        // Supprimer l'enregistrement en base
+        $media->delete();
+
+        return response()->json([
+            'message' => 'Média supprimé avec succès',
+            'status'  => 200
+        ], 200);
     }
 
 }
