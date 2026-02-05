@@ -2,10 +2,11 @@
 
 # compiled output
 /frontend/dist
+/frontend/dist.zip
 /frontend/dist-server
 /frontend/tmp
 /out-tsc
-
+/backend.zip
 # dependencies
 /backend/node_modules
 /backend/vendor
