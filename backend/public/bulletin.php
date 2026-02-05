@@ -1,1 +1,0 @@
-<?php shell_exec('..\cmd\crexport.exe -U lycee -P lycee -D lycee -F documents\BULLETIN_ELEVES_UN.rpt -a "bulletin_id:52" -O temp\bulletin.pdf -E pdf -l'); ?>

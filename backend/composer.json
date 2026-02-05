@@ -21,6 +21,7 @@
         "nahidulhasan/html2pdf": "^1.4",
         "nextapps/laravel-swagger-ui": "^0.3.0",
         "phpoffice/phpexcel": "^1.8",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spipu/html2pdf": "^5.2",
         "tymon/jwt-auth": "^1.0"
     },

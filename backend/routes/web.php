@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TraitementsDasController;
+use App\Http\Controllers\QRCodeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +20,4 @@ Route::get('/', function () {
 // Route::get('/login', function () {
 //     return view('admin/admin-user/index');
 // });
-Route::get('/test', function () {
-    $binance = new TraitementsDasController();
-   $binance->test8();
-});
+Route::get('qr-code', [QRCodeController::class, 'index']);

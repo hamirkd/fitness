@@ -1,0 +1,28 @@
+<div class="flex flex-col sm:flex-row flex-auto min-w-0">
+    <div
+      class="flex items-center justify-center
+             w-full h-full py-8 px-4 sm:p-12 md:p-16
+             sm:rounded-2xl md:rounded-none
+             sm:shadow md:shadow-none sm:bg-card">
+  
+      <div class="flex flex-col items-center space-y-6">
+  
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center">
+            Bienvenue et merci de votre présence !
+                </h2>
+  
+        <p class="text-center text-gray-700 max-w-xl
+        text-lg sm:text-xl md:text-2xl leading-relaxed">
+            Dans le cadre du contrôle d’accès,
+          <span class="font-semibold">
+            le scan du code QR est obligatoire avant toute entrée.
+          </span>
+        </p>
+  
+        <div [innerHTML]="svgContent"></div>
+  
+      </div>
+  
+    </div>
+  </div>
+  

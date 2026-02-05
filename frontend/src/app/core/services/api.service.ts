@@ -25,6 +25,9 @@ export class ApiService {
     get2(url:string): Observable<any>{
       return this._httpClient.get(environment.urlApi+url,{responseType: 'blob',reportProgress:true});
     }
+    get3(url:string): Observable<any>{
+      return this._httpClient.get(environment.urlApi+url,{responseType: 'text'});
+    }
 
     delete(url:string): Observable<any>{
       return this._httpClient.delete(environment.urlApi+url);

@@ -28,12 +28,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { QrCodeAbonneModule } from 'app/modules/auth/qrcode-abonne/qrcode-abonne.module';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
-        ReactiveFormsModule, MatButtonModule
+        ReactiveFormsModule, MatButtonModule,
+        QrCodeAbonneModule
     ],
     exports: [
         CommonModule,
@@ -64,7 +66,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
         MatDialogModule,
         MatOptionModule,
         MatSelectModule,MatSnackBarModule,
-        MatNativeDateModule, MatMomentDateModule, TranslateModule
+        MatNativeDateModule, MatMomentDateModule, TranslateModule,
+        QrCodeAbonneModule
 
     ],
     providers: [TranslateService]

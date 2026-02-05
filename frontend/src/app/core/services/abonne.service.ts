@@ -48,5 +48,8 @@ export class AbonneService {
 
       return this.apiService.post3('api/abonne/uploadAvatar',formData,{ headers: headers });
   }
+  getSvg() {
+    return this.apiService.get3('web/qr-code');
+  }
 
 }

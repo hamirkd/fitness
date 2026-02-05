@@ -1,7 +1,12 @@
 {
     "/api/*": {
-        "target": "http://51.178.18.128:8200",
+        "target": "http://ecaf-fitness.site/backend",
         "secure": false,
         "logLevel": "debug"
+    },
+    "/web/*": {
+        "target": "http://ecaf-fitness.site/backend",
+        "secure": false,
+        "logLeve": "debug"
     }
 }

@@ -1,1 +1,0 @@
-<?php shell_exec('..\cmd\crexport.exe -U lycee -P lycee -D lycee -F documents\BULLETIN_ELEVES_TOTAL_T1.rpt -a "annee_id:2023" -a "trimestre:T1" -a "salle_classe_id:1" -O temp\DELIBERATION.pdf -E pdf -l'); ?>

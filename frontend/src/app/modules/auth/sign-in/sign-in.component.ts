@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
+import { AbonneService } from 'app/core/services/abonne.service';
 
 @Component({
     selector     : 'auth-sign-in',
@@ -21,6 +23,7 @@ export class AuthSignInComponent implements OnInit
     };
     signInForm: FormGroup;
     showAlert: boolean = false;
+    svgContent
 
     /**
      * Constructor
@@ -29,7 +32,10 @@ export class AuthSignInComponent implements OnInit
         private _activatedRoute: ActivatedRoute,
         private _authService: AuthService,
         private _formBuilder: FormBuilder,
-        private _router: Router
+        private _router: Router,
+    
+        private api: AbonneService,
+        private sanitizer: DomSanitizer
     )
     {
     }
@@ -49,7 +55,18 @@ export class AuthSignInComponent implements OnInit
             password  : ['', Validators.required],
             rememberMe: ['']
         });
-    }
+        this.refresh();
+      }
+    
+      refresh() {
+        this.api.getSvg().subscribe(svg => {
+          console.log(svg)
+          this.svgContent = this.sanitizer.bypassSecurityTrustHtml(svg);
+        });
+        setTimeout(() => {
+          this.refresh();
+        }, 30000);
+      }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
