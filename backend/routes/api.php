@@ -53,20 +53,20 @@ Route::middleware('auth:api')->group(function() {
     Route::post('versements/cancelle', [VersementController::class,'cancelle']);
     Route::post('versements/restore', [VersementController::class,'restore']);
     
-    Route::post('facture/restore', 'App\Http\Controllers\FactureController@restore');
-    Route::post('facture/cancelle', 'App\Http\Controllers\FactureController@cancelle');
-    Route::post('facture/nouvelle', 'App\Http\Controllers\FactureController@nouvelle');
-    Route::post('facture/findBy', 'App\Http\Controllers\FactureController@findBy');
-    Route::post('facture/addMost', 'App\Http\Controllers\FactureController@addMost');
-    Route::post('facture/imprimer', 'App\Http\Controllers\FactureController@imprimer');
-    Route::post('facture/paye', 'App\Http\Controllers\FactureController@paye');
+    Route::post('abonnement/restore', 'App\Http\Controllers\AbonnementController@restore');
+    Route::post('abonnement/cancelle', 'App\Http\Controllers\AbonnementController@cancelle');
+    Route::post('abonnement/nouvelle', 'App\Http\Controllers\AbonnementController@nouvelle');
+    Route::post('abonnement/findBy', 'App\Http\Controllers\AbonnementController@findBy');
+    Route::post('abonnement/addMost', 'App\Http\Controllers\AbonnementController@addMost');
+    Route::post('abonnement/imprimer', 'App\Http\Controllers\AbonnementController@imprimer');
+    Route::post('abonnement/paye', 'App\Http\Controllers\AbonnementController@paye');
     
-    Route::apiResource('facture', 'App\Http\Controllers\FactureController');
+    Route::apiResource('abonnement', 'App\Http\Controllers\AbonnementController');
     
-    Route::post('client/uploadAvatar', 'App\Http\Controllers\ClientController@uploadAvatar');
-    Route::get('client/removeAvatar/{client_id}', 'App\Http\Controllers\ClientController@removeAvatar');
-    Route::get('client/getAvatar/{client_id}', 'App\Http\Controllers\ClientController@getAvatar');
-    Route::apiResource('client', 'App\Http\Controllers\ClientController');
+    Route::post('abonne/uploadAvatar', 'App\Http\Controllers\AbonneController@uploadAvatar');
+    Route::get('abonne/removeAvatar/{abonne_id}', 'App\Http\Controllers\AbonneController@removeAvatar');
+    Route::get('abonne/getAvatar/{abonne_id}', 'App\Http\Controllers\AbonneController@getAvatar');
+    Route::apiResource('abonne', 'App\Http\Controllers\AbonneController');
 
     Route::apiResource('media', 'App\Http\Controllers\MediaController');
     Route::post('media/getMediaByTypeAndId', 'App\Http\Controllers\MediaController@getMediaByTypeAndId');

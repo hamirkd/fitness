@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use MBence\OpenTBSBundle\Services\OpenTBS;
 use App\Models\Client;
-use App\Models\Facture;
+use App\Models\Abonnement;
 use App\Models\Tarif;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -14,7 +14,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use DateTime;
 
-class FactureController extends Controller
+class AbonnementController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,7 +23,7 @@ class FactureController extends Controller
      */
     public function index()
     {
-        return Facture::all();
+        return Abonnement::all();
     }
 
     /**
@@ -35,45 +35,45 @@ class FactureController extends Controller
     public function store(Request $request)
     {
         if(isset($request['id'])&&$request['id']>0){
-            $facture = Facture::find($request['id']);
-            $facture->update(MyFunction::audit($request->all()));
+            $abonnement = Abonnement::find($request['id']);
+            $abonnement->update(MyFunction::audit($request->all()));
             return response()->json([
-                'message' => "La facture a été mise à jour",
+                'message' => "La abonnement a été mise à jour",
                 'status' => 200
             ], 200);
         }
-        Facture::create(MyFunction::audit($request->all()));
+        Abonnement::create(MyFunction::audit($request->all()));
         return response()->json([
-            'message' => 'Ajout d\'une nouvelle facture',
+            'message' => 'Ajout d\'une nouvelle abonnement',
             'status' => 200
         ], 200);
     }
     /**
-     * Création des factures d'une période données.
+     * Création des abonnements d'une période données.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function nouvelle(Request $request)
     {
-        $factures = Facture::where('periode', '=', $request['periode'])->get();
-        $facturePasse = array();
-        if (count($factures)>0) {
-            $facturePasse = Facture::where('periode', '>', $factures[0]['periode'])->get();
+        $abonnements = Abonnement::where('periode', '=', $request['periode'])->get();
+        $abonnementPasse = array();
+        if (count($abonnements)>0) {
+            $abonnementPasse = Abonnement::where('periode', '>', $abonnements[0]['periode'])->get();
         }
         
-        if (count($facturePasse)>0) {
+        if (count($abonnementPasse)>0) {
             return response()->json([
-                'message' => "Impossible de générer des factures anciennes si des nouvelles factures existent",
+                'message' => "Impossible de générer des abonnements anciennes si des nouvelles abonnements existent",
                 'status' => 409
             ], 409);
         }
-        if (count($factures) > 0) {
+        if (count($abonnements) > 0) {
             if ($request['type'] && $request['type'] == 'REGENERE') {
-                Facture::where('periode', '=', $request['periode'])->delete();
+                Abonnement::where('periode', '=', $request['periode'])->delete();
             } else
             return response()->json([
-                'message' => "Il existe déjà des factures générées à cette période",
+                'message' => "Il existe déjà des abonnements générées à cette période",
                 'status' => 200
             ], 403);
         }
@@ -91,7 +91,7 @@ class FactureController extends Controller
             $setTarifs[$tarif->typetarif] = $tarif;
         }
         foreach ($clients as $client) {
-            Facture::create(MyFunction::audit([
+            Abonnement::create(MyFunction::audit([
                 'client_id'=> $client->id,
                 'nom'=>$client->nom,
                 'prenom'=>$client->prenom,
@@ -104,11 +104,11 @@ class FactureController extends Controller
                 'etat'=> 'NONPAYE'
             ]));
         }
-        return Facture::where('periode', '=', $request['periode'])->get();
+        return Abonnement::where('periode', '=', $request['periode'])->get();
     }
 
     /**
-     * Création des factures d'une période données.
+     * Création des abonnements d'une période données.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -116,54 +116,54 @@ class FactureController extends Controller
     public function findBy(Request $request)
     {
         if ($request['periode']) {
-            return Facture::where('periode', '=', $request['periode'])->get();
+            return Abonnement::where('periode', '=', $request['periode'])->get();
         }
         if ($request['datedebut'] && $request['datefin'])
-        return Facture::whereBetween('periode', [$request['datedebut'] , $request['datefin']])->get();
+        return Abonnement::whereBetween('periode', [$request['datedebut'] , $request['datefin']])->get();
     
         if ($request['etat']) {
-            return Facture::where('etat', '=', $request['etat'])->get();
+            return Abonnement::where('etat', '=', $request['etat'])->get();
         }
         if ($request['client_id']) {
-            return Facture::where('client_id', '=', $request['client_id'])->get();
+            return Abonnement::where('client_id', '=', $request['client_id'])->get();
         }
     }
 
     
     /**
-     * Création des factures d'une période données.
+     * Création des abonnements d'une période données.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function addMost(Request $request)
     {
-        $factures = $request['factures'];
-        // Impossible de modifier les anciennes factures si des nouvelles factures existent
-        $facturePasse = Facture::where('periode', '>', $factures[0]['periode'])->get();
-        if (count($facturePasse)>0) {
+        $abonnements = $request['abonnements'];
+        // Impossible de modifier les anciennes abonnements si des nouvelles abonnements existent
+        $abonnementPasse = Abonnement::where('periode', '>', $abonnements[0]['periode'])->get();
+        if (count($abonnementPasse)>0) {
             return response()->json([
-                'message' => "Impossible de modifier les anciennes factures si des nouvelles factures existent",
+                'message' => "Impossible de modifier les anciennes abonnements si des nouvelles abonnements existent",
                 'status' => 409
             ], 409);
         }
-        foreach ($factures as $facture) {
-            if(isset($facture['id'])&&$facture['id']>0){
-                $facturet = Facture::find($facture['id']);
+        foreach ($abonnements as $abonnement) {
+            if(isset($abonnement['id'])&&$abonnement['id']>0){
+                $abonnementt = Abonnement::find($abonnement['id']);
                 
-                if ($facture['etat'] !== 'PAYE') {
-                    $facturet->update(MyFunction::audit($facture));
-                    Client::find($facture['client_id'])->update(["ancienindex"=>$facture['nouveauindex']]);
+                if ($abonnement['etat'] !== 'PAYE') {
+                    $abonnementt->update(MyFunction::audit($abonnement));
+                    Client::find($abonnement['client_id'])->update(["ancienindex"=>$abonnement['nouveauindex']]);
                 }
             } else {
                 return response()->json([
-                    'message' => "Cette facture n'existe pas, veuillez verifier à nouveau",
+                    'message' => "Cette abonnement n'existe pas, veuillez verifier à nouveau",
                     'status' => 409
                 ], 409);
             }
         }
         return response()->json([
-            'message' => "Les factures ont été mise à jour",
+            'message' => "Les abonnements ont été mise à jour",
             'status' => 200
         ], 200);
     }
@@ -172,17 +172,17 @@ class FactureController extends Controller
     {
         
         setlocale(LC_TIME, 'fr_FR.UTF-8');
-        $factures = Facture::where('periode', '=', $request['periode']);
+        $abonnements = Abonnement::where('periode', '=', $request['periode']);
         if ($request['id']) {
-            $factures =  Facture::where('id', '=', $request['id']);
+            $abonnements =  Abonnement::where('id', '=', $request['id']);
         }
         if ($request['client_id']) {
-            $factures =  Facture::where('client_id', '=', $request['client_id']);
+            $abonnements =  Abonnement::where('client_id', '=', $request['client_id']);
         }
-        $factures = $factures->get();
-        $title = 'Facture';
-        $html = view('facture', ['title' => $title,
-        'factures' => $factures])->render();
+        $abonnements = $abonnements->get();
+        $title = 'Abonnement';
+        $html = view('abonnement', ['title' => $title,
+        'abonnements' => $abonnements])->render();
          
         $options = new Options();
         $dompdf = new Dompdf($options);
@@ -198,78 +198,78 @@ class FactureController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Facture  $facture
+     * @param  \App\Models\Abonnement  $abonnement
      * @return \Illuminate\Http\Response
      */
-    public function show(Facture $facture)
+    public function show(Abonnement $abonnement)
     {
-        return $facture;
+        return $abonnement;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Facture  $scolarite
+     * @param  \App\Models\Abonnement  $scolarite
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Facture $facture)
+    public function update(Request $request, Abonnement $abonnement)
     {
-        if ($facture->etat == 'PAYE') {
+        if ($abonnement->etat == 'PAYE') {
             return response()->json([
-                'message' => "Cette facture a déjà été payée",
+                'message' => "Cette abonnement a déjà été payée",
                 'status' => 409
             ], 409);
         }
-        $facture->update($request->all());
+        $abonnement->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Facture  $facture
+     * @param  \App\Models\Abonnement  $abonnement
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Facture $facture)
+    public function destroy(Abonnement $abonnement)
     {
-        if ($facture->etat == 'PAYE') {
+        if ($abonnement->etat == 'PAYE') {
             return response()->json([
-                'message' => "Cette facture a déjà été payée",
+                'message' => "Cette abonnement a déjà été payée",
                 'status' => 409
             ], 409);
         }
-        $facture->delete();
+        $abonnement->delete();
     }
     
     public function cancelle(Request $request)
     {
-        $facture = Facture::find($request->id);
-        if ($facture->etat == 'PAYE') {
+        $abonnement = Abonnement::find($request->id);
+        if ($abonnement->etat == 'PAYE') {
             return response()->json([
-                'message' => "Cette facture a déjà été payée",
+                'message' => "Cette abonnement a déjà été payée",
                 'status' => 409
             ], 409);
         }
          
-        return $facture->update(["cancelled_at"=>now(),"motif"=>$request->motif]);
+        return $abonnement->update(["cancelled_at"=>now(),"motif"=>$request->motif]);
     }
 
     public function restore(Request $request)
     {
-        $facture = Facture::find($request->id);
-        if ($facture->etat == 'PAYE') {
+        $abonnement = Abonnement::find($request->id);
+        if ($abonnement->etat == 'PAYE') {
             return response()->json([
-                'message' => "Cette facture a déjà été payée",
+                'message' => "Cette abonnement a déjà été payée",
                 'status' => 409
             ], 409);
         }
-        return $facture->update(["cancelled_at"=>null,"motif"=>null]);
+        return $abonnement->update(["cancelled_at"=>null,"motif"=>null]);
     }
 
     public function paye(Request $request)
     {
-        $facture = Facture::find($request->id);
-        return $facture->update(["etat"=>'PAYE', "datepaiement"=> now()]);
+        $abonnement = Abonnement::find($request->id);
+        return $abonnement->update(["etat"=>'PAYE', "datepaiement"=> now()]);
     }
     
     

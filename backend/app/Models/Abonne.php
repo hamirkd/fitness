@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Client extends Model
+class Abonne extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -21,14 +21,9 @@ class Client extends Model
       'email',
       'genre',
       'observation',
-      'typeclient',
       'lieunais',
       'file_name',
       'cnib',
-      'numerocompteur',
-      'ancienindex',
-      'longitude',
-      'latitude',
       'updated_by',
       'created_by',
     ];

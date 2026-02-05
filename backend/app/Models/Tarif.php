@@ -12,10 +12,10 @@ class Tarif extends Model
     * @var array
     */
    protected $fillable = [
-    'typetarif',
+    'code',
     'montant',
-    'redevance',
-    'autres_frais',
+    'libelle',
+    'duree',
     'updated_by',
     'created_by',
     'updated_at',

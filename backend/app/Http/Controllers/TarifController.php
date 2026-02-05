@@ -38,10 +38,10 @@ class TarifController extends Controller
             ], 200);
         }
         else {
-            $tarif = Tarif::where('typetarif', '=', $request['typetarif'])->get();
+            $tarif = Tarif::where('code', '=', $request['code'])->get();
             if (count($tarif)>0) {
                 return response()->json([
-                    'message' => "Un tarif de ce type a déjà été enregistré",
+                    'message' => "Un tarif de ce code a déjà été enregistré",
                     'status' => 409,
                     'tarif' => $tarif
                 ], 409);
@@ -64,36 +64,6 @@ class TarifController extends Controller
     {
         return $tarif;
     } 
-
-    /**
-     * Display a listing of the resource by Classe.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getListByAnnee(Request $request)
-    {
-        return Tarif::
-        leftJoin('classes', function($join){
-            $join->on('tarifs.classe_id', '=', 'classes.id');
-        })
-        ->select('classes.*','tarifs.*')
-        ->orderBy('classes.id', 'ASC')->orderBy('tarifs.serie', 'ASC')
-        ->where('tarifs.annee_id','=',$request['annee_id'])
-        ->get();
-    }
-
-    /**
-     * Display a listing of the resource by Classe.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getByAnneeClasseSerie(Request $request)
-    {
-        return $tarif = Tarif::where('annee_id','=',$request['annee_id'])
-        ->where('classe_id','=',$request['classe_id'])
-        ->where('serie','=',$request['serie'])
-        ->first();
-    }
 
     /**
      * Update the specified resource in storage.
