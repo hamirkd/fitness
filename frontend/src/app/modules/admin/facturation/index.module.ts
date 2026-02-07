@@ -6,7 +6,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import { TarifComponent } from './tarif/tarif.component';
 import { AddTarifComponent } from './tarif/add-tarif/add-tarif.component';
 import { AbonnementComponent } from './consultation/abonnement.component';
-import { NouveauAbonnementComponent } from './nouveau-abonnement/nouveau-abonnement.component';
+import { AddAbonnementComponent } from './add-abonnement/add-abonnement.component';
 import { AbonnementMotifAnnulationComponent } from './consultation/abonnement-motif-annulation/abonnement-motif-annulation.component';
 
 
@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'consultation', component: AbonnementComponent },
   { path: 'tarif', component: TarifComponent },
   { path: 'tarif-add', component: AddTarifComponent },
-  { path: 'nouveau', component: NouveauAbonnementComponent }
+  { path: 'nouveau', component: AddAbonnementComponent }
 ];
 
 @NgModule({
@@ -24,7 +24,7 @@ const routes: Routes = [
     AbonnementComponent,
     TarifComponent,
     AddTarifComponent,
-    NouveauAbonnementComponent, AbonnementMotifAnnulationComponent
+    AddAbonnementComponent, AbonnementMotifAnnulationComponent
   ],
   imports: [
     CommonModule,

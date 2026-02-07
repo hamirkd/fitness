@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AbonneService } from 'app/core/services/abonne.service';
 import { ApiService } from 'app/core/services/api.service';
 import { UserService } from 'app/core/user/user.service';
+import { AddAbonnementComponent } from '../facturation/add-abonnement/add-abonnement.component';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,25 +16,30 @@ export class DashboardComponent implements OnInit {
 
   currentUser:any;
   svgContent!: SafeHtml;
+  dialogRef: any;
 
   constructor(private _userService:UserService,
-    
-  private api: AbonneService,
-  private sanitizer: DomSanitizer) { }
+    private _matDialog: MatDialog) { }
 
   ngOnInit(): void {
     this._userService.user$.subscribe(user=>{this.currentUser=user;});
-    this.refresh();
   }
 
-  refresh() {
-    this.api.getSvg().subscribe(svg => {
-      console.log(svg)
-      this.svgContent = this.sanitizer.bypassSecurityTrustHtml(svg);
+  ajouterButton() {
+    this.dialogRef = this._matDialog.open(AddAbonnementComponent, {
+      panelClass: 'w-1/3',
+      data: {
+        abonnement: {},
+        action: 'new'
+      }
     });
-    setTimeout(() => {
-      this.refresh();
-    }, 5000);
+
+    this.dialogRef.afterClosed()
+      .subscribe((response: FormGroup) => {
+        if (!response) {
+          return;
+        }
+      });
   }
 
 }

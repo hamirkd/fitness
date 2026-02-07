@@ -17,11 +17,11 @@ export const defaultNavigation: FuseNavigationItem[] = [
     },
     {
         id: 'facturation',
-        title: 'Facturation',
+        title: 'Abonnement',
         type: 'basic',
         icon: 'iconsmind:students',
-        link: '/facturation',
-        roles: 'USER,ADMIN,SCOLARITE,DIRECTEUR,SECRETAIRE'
+        link: '/abonnement',
+        roles: 'USER,ADMIN'
     },
     {
         id: 'client',

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
@@ -11,6 +11,8 @@ import FileSaver from 'file-saver';
 import { AbonnementMotifAnnulationComponent } from './abonnement-motif-annulation/abonnement-motif-annulation.component';
 import { AbonnementService } from 'app/core/services/abonnement.service';
 import { Abonnement } from 'app/models/abonnement.model';
+import { AddAbonneComponent } from '../../abonne/add-abonne/add-abonne.component';
+import { AddAbonnementComponent } from '../add-abonnement/add-abonnement.component';
 
 @Component({
     selector: 'app-abonnement',
@@ -49,9 +51,7 @@ export class AbonnementComponent implements OnInit {
         'date_debut',
         'date_fin',
         'duree',
-        'remise',
         'montant',
-        'montanttotal',
         'etat',
         'actions',
     ];
@@ -71,12 +71,13 @@ export class AbonnementComponent implements OnInit {
                 datefin: this.datefin,
             })
             .subscribe((data) => {
-                this.abonnements = data as Abonnement[]; 
-                this.dataSource.data = data as Abonnement[];
+                const abonnements = data as Abonnement[]; 
+                this.abonnements = [];
+                abonnements.forEach(abonnement=>{
+                    this.abonnements.push(new Abonnement(abonnement));
+                });
+                this.dataSource.data = this.abonnements;
 
-                this.dataSource.data.forEach(da => {
-                    da['nomprenom'] = da.nom + ' ' + da.prenom;
-                })
             });
     }
     rechercherButton() {
@@ -88,7 +89,7 @@ export class AbonnementComponent implements OnInit {
         this.dialogRef = this._fuseConfirmationService.open({
             title: 'Resturation de abonnement',
             message:
-                'Voulez-vous restaurer la abonnement N ' + element.id + ' ?',
+                'Voulez-vous restaurer l\'abonnement de ' + element.nomprenom + ' ?',
         });
 
         this.dialogRef.afterClosed().subscribe((response) => {
@@ -129,38 +130,12 @@ export class AbonnementComponent implements OnInit {
             );
         });
     }
-    
-    payer(element: Abonnement) {
-        this.dialogRef = this._fuseConfirmationService.open({
-            title: 'Paiement de abonnement',
-            message:
-                'Voulez-vous payer la abonnement N ' + element.id + ' ?',
-        });
-
-        this.dialogRef.afterClosed().subscribe((response: any) => {
-            if (!response) {
-                return;
-            }
-            if (response === 'confirmed') {
-            console.log(response);
-            this.abonnementService.paye(element).subscribe(
-                (d) => {
-                    this._updateDataSource();
-                    console.log(d);
-                },
-                (err) => {
-                    console.log(err);
-                }
-            );
-        }
-        });
-    }
 
     supprimer(element: Abonnement) {
         this.dialogRef = this._fuseConfirmationService.open({
-            title: 'Suppression de versement',
+            title: 'Suppression de abonnement',
             message:
-                'Voulez-vous supprimer le versement N ' + element.id + ' ?',
+                'Voulez-vous supprimer le abonnement N ' + element.id + ' ?',
         });
         console.log(this.user);
 
@@ -223,5 +198,26 @@ export class AbonnementComponent implements OnInit {
           return array.map(it => {
               return Object.values(it).join(';').toString()
           }).join('\n')
+      }
+
+      ajouterButton(){
+
+        this.dialogRef = this._matDialog.open(AddAbonnementComponent, {
+            panelClass: 'w-full',
+            data      : {
+                abonnement:{},
+                action: 'new'
+            } 
+        });
+  
+        this.dialogRef.afterClosed()
+            .subscribe((response: FormGroup) => {
+                if ( !response )
+                {
+                    return;
+                }
+                
+                this._updateDataSource();
+            });
       }
 }

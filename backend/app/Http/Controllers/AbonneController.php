@@ -86,15 +86,42 @@ class AbonneController extends Controller
         return $abonne;
     }
 
-    public function getAvatar($abonne_id){
+    public function getAvatar($abonne_id) {
+
         $abonne = Abonne::find($abonne_id);
-        return response()->file('..\storage\app\public\uploads\\PERSONNEL\\'.$abonne->file_name);
+        if (!$abonne) {
+            return response()->json([
+                'message' => 'Média introuvable'
+            ], 404);
+        }
+
+        $path = 'uploads/PERSONNEL/' . $media->type_documents . '/' . $abonne->file_name;
+
+        if (!Storage::disk('public')->exists($path)) {
+            return response()->json([
+                'message' => 'Fichier non trouvé sur le serveur'
+            ], 404);
+        }
+
+        return Storage::disk('public')->response($path);
     }
+
     public function removeAvatar($abonne_id){
+
         $abonne = Abonne::find($abonne_id);
 
-        if($abonne->file_name!=null&&file_exists(storage_path('..\storage\app\public\uploads\\PERSONNEL\\'.$abonne->file_name)))
-        unlink(storage_path('..\storage\app\public\uploads\\PERSONNEL\\'.$abonne->file_name));
+        if (!$abonne) {
+            return response()->json([
+                'message' => 'Média introuvable'
+            ], 404);
+        }
+
+        $path = 'uploads/PERSONNEL/' . $abonne->file_name;
+
+        // Supprimer le fichier s'il existe
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
         $abonne->file_name = null;
         $abonne->update();
         return $abonne;

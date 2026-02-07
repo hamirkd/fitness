@@ -16,6 +16,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Abonnement } from 'app/models/abonnement.model';
 import { AbonnementService } from 'app/core/services/abonnement.service';
 import { MediaAddComponent } from '../media-add/media-add.component';
+import { AbonnementMotifAnnulationComponent } from '../../facturation/consultation/abonnement-motif-annulation/abonnement-motif-annulation.component';
+import { AddAbonnementComponent } from '../../facturation/add-abonnement/add-abonnement.component';
 
 @Component({
     selector: 'app-detail-abonne',
@@ -47,16 +49,16 @@ export class DetailAbonneComponent implements OnInit {
         'date_debut',
         'date_fin',
         'duree',
-        'remise',
         'montant',
-        'montanttotal',
         'etat',
+        'created_by',
         'actions'
     ];
     
     token;
     urlForBackend;
     montant: { nonpaye: number; paye: number; } = {nonpaye:0, paye:0};
+    actualiser = {};
     constructor(
         private _abonneService: AbonneService,
         private _matDialog: MatDialog,
@@ -65,7 +67,8 @@ export class DetailAbonneComponent implements OnInit {
         private _authService: AuthService,
         private _mediaService: MediaService,
         private route: ActivatedRoute,
-        private _factureService:AbonnementService
+        private abonnementService:AbonnementService,
+
 
     ) {
         this.token = this._authService.accessToken;
@@ -161,49 +164,8 @@ export class DetailAbonneComponent implements OnInit {
                 console.log(this.abonne);
             });
     } 
+     
     
-    payer(element: Abonnement) {
-        this.dialogRef = this._fuseConfirmationService.open({
-            title: 'Paiement de facture',
-            message:
-                'Voulez-vous payer la facture N ' + element.id + ' ?',
-        });
-
-        this.dialogRef.afterClosed().subscribe((response: any) => {
-            if (!response) {
-                return;
-            }
-            if (response === 'confirmed') {
-            console.log(response);
-            this._factureService.paye(element).subscribe(
-                (d) => {
-                    this._updateDataSourceAbonnement();
-                    console.log(d);
-                },
-                (err) => {
-                    console.log(err);
-                }
-            );
-        }
-        });
-    }
- 
-
-    supprimerContrat(element) {
-        this.dialogRef = this._fuseConfirmationService.open({
-            title: 'Suppression de contrat',
-            message:
-                'Voulez-vous supprimer le contrat N ' + element.id + ' ?',
-        });
-
-        this.dialogRef.afterClosed().subscribe((response) => {
-            if (response === 'confirmed') {
-                //***DELETE ONE */
-                // this._contratService.delete(element).subscribe((data) => {
-                // });
-            }
-        });
-    }
     _updateDataSourceDocument() {
         this._mediaService
             .getMediaByTypeAndId({
@@ -234,10 +196,10 @@ export class DetailAbonneComponent implements OnInit {
         });
     }
     
-    imprimer() {
-        this.data['btnadd'] = true;
+    imprimerTout() {
+        this.data['btnprint'] = true;
 
-        this._factureService
+        this.abonnementService
             .imprimerAbonnement({
                  abonne_id : this.abonne_id
             })
@@ -245,26 +207,7 @@ export class DetailAbonneComponent implements OnInit {
                 const fileUrl = URL.createObjectURL(data);
                 // Ouvrir le fichier dans un nouvel onglet
                 window.open(fileUrl, '_blank');
-                this.data['btnadd'] = false;
-                this._snackBar.open('Téléchargement terminé', 'Splash', {
-                    horizontalPosition: 'right',
-                    verticalPosition: 'top',
-                    duration: 2000
-                });
-            });
-    }
-    
-    imprimerUn(element) {
- 
-        this._factureService
-            .imprimerAbonnement({
-                 id : element.id
-            })
-            .subscribe((data: Blob)=>{
-                const fileUrl = URL.createObjectURL(data);
-                // Ouvrir le fichier dans un nouvel onglet
-                window.open(fileUrl, '_blank');
-                this.data['btnadd'] = false;
+                this.data['btnprint'] = false;
                 this._snackBar.open('Téléchargement terminé', 'Splash', {
                     horizontalPosition: 'right',
                     verticalPosition: 'top',
@@ -314,30 +257,43 @@ export class DetailAbonneComponent implements OnInit {
         );
     }
 
-    addAbonnement() {
 
-    }
-    imprimerAbonnement(element) {
+    ajouterButton(){
+        this.data['btnadd'] = true;
+        this.dialogRef = this._matDialog.open(AddAbonnementComponent, {
+            panelClass: 'w-full',
+            data      : {
+                abonnement:{abonne_id: this.abonne_id},
+                action: 'new'
+            } 
+        });
+  
+        this.dialogRef.afterClosed()
+            .subscribe((response: FormGroup) => {
+                if ( !response )
+                {
+                    this.data['btnadd'] = false;
+                    return;
+                }
+                this.data['btnadd'] = false;
+                
+                this._updateDataSourceAbonnement();
+            });
+      }
 
-    }
+    
     
       _updateDataSourceAbonnement() {
-        this._factureService
+        this.abonnementService
             .findBy({
                  abonne_id:this.abonne_id
             })
             .subscribe((data) => {
-                this.dataSourceAbonnement.data = data as Abonnement[];
-                this.montant ={nonpaye:0, paye:0};
-                this.dataSourceAbonnement.data.forEach(da => {
-                    da['nomprenom'] = da.nom + ' ' + da.prenom;
-                    da['numerocompteur'] = da.abonne?.numerocompteur;
-                    if (da.etat == 'PAYE') {
-                        this.montant.paye = this.montant.paye + Number(da.montanttotal ?? 0);
-                    } else {
-                        this.montant.nonpaye = this.montant.nonpaye + Number(da.montanttotal ?? 0);
-                    }
-                })
+                const listeAbonnement = [];
+                 (data as Abonnement[]).forEach(abonnement => {
+                    listeAbonnement.push(new Abonnement(abonnement));
+                 });
+                 this.dataSourceAbonnement.data = listeAbonnement;
             });
     }
  
@@ -352,5 +308,91 @@ export class DetailAbonneComponent implements OnInit {
         //   alert("Les coordonnées ne sont pas disponibles.");
         // }
       }
+
+      restorerAbonnement(element: Abonnement) {
+        this.dialogRef = this._fuseConfirmationService.open({
+            title: 'Resturation de abonnement',
+            message:
+                'Voulez-vous restaurer l\'abonnement de ' + element.nomprenom + ' ?',
+        });
+
+        this.dialogRef.afterClosed().subscribe((response) => {
+            if (response === 'confirmed') {
+                //***Restaure */
+                this.abonnementService
+                    .restore({id:element.id})
+                    .subscribe((data) => {
+                        console.log(data);
+                        this._updateDataSource();
+                    });
+            }
+        });
+    }
+    annulerAbonnement(element: Abonnement) {
+        this.dialogRef = this._matDialog.open(
+            AbonnementMotifAnnulationComponent,
+            {
+                data: {
+                    id: element.id,
+                },
+            }
+        );
+
+        this.dialogRef.afterClosed().subscribe((response: any) => {
+            if (!response) {
+                return;
+            }
+            console.log(response);
+            this.abonnementService.cancelle(response).subscribe(
+                (d) => {
+                    this._updateDataSource();
+                    console.log(d);
+                },
+                (err) => {
+                    console.log(err);
+                }
+            );
+        });
+    }
+
+    supprimerAbonnement(element: Abonnement) {
+        this.dialogRef = this._fuseConfirmationService.open({
+            title: 'Suppression de abonnement',
+            message:
+                'Voulez-vous supprimer le abonnement N ' + element.id + ' ?',
+        });
+        this.dialogRef.afterClosed().subscribe((response) => {
+            if (response === 'confirmed') {
+                //***DELETE ONE */
+                this.abonnementService
+                    .delete(element)
+                    .subscribe((data) => {
+                        console.log(data);
+                        this._updateDataSource();
+                    });
+            }
+        });
+    }
+    
+    imprimerAbonnement(element) {
+        this.actualiser['btn2'] = true;
+        this.abonnementService
+            .imprimerAbonnement({
+                 id : element.id
+            })
+            .subscribe((data: Blob)=>{
+                const fileUrl = URL.createObjectURL(data);
+                // Ouvrir le fichier dans un nouvel onglet
+                window.open(fileUrl, '_blank');
+                this.actualiser['btn2'] = false;
+                this._snackBar.open('Téléchargement terminé', 'Splash', {
+                    horizontalPosition: 'right',
+                    verticalPosition: 'top',
+                    duration: 2000
+                });
+            });
+    }
+
+    
  
 }

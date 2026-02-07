@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NouveauAbonnementComponent } from './nouveau-abonnement.component';
+import { AddAbonnementComponent } from './add-abonnement.component';
 
-describe('NouveauAbonnementComponent', () => {
-  let component: NouveauAbonnementComponent;
-  let fixture: ComponentFixture<NouveauAbonnementComponent>;
+describe('AddAbonnementComponent', () => {
+  let component: AddAbonnementComponent;
+  let fixture: ComponentFixture<AddAbonnementComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NouveauAbonnementComponent ]
+      declarations: [ AddAbonnementComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NouveauAbonnementComponent);
+    fixture = TestBed.createComponent(AddAbonnementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

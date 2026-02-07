@@ -44,15 +44,9 @@ Route::group([
 
 Route::middleware('auth:api')->group(function() { 
     Route::apiResource('tarif', 'App\Http\Controllers\TarifController');
-    Route::apiResource('versements', 'App\Http\Controllers\VersementController');
-    Route::post('versements/getByAnneeInscription', [VersementController::class,'getByAnneeInscription']);
-    Route::post('versements/getEleveDetailVersementByAnneeAndEleve', [VersementController::class,'getEleveDetailVersementByAnneeAndEleve']);
-    Route::post('versements/getVersementByAnneeOrAll', [VersementController::class,'getVersementByAnneeOrAll']);
-    Route::post('versements/getVersementByAnneeOrAllGroupeBy', [VersementController::class,'getVersementByAnneeOrAllGroupeBy']);
-    Route::post('versements/getVersementByAnneeOrAllGroupeByImpression', [VersementController::class,'getVersementByAnneeOrAllGroupeByImpression']);
-    Route::post('versements/cancelle', [VersementController::class,'cancelle']);
-    Route::post('versements/restore', [VersementController::class,'restore']);
     
+    
+    Route::apiResource('abonnement', 'App\Http\Controllers\AbonnementController');
     Route::post('abonnement/restore', 'App\Http\Controllers\AbonnementController@restore');
     Route::post('abonnement/cancelle', 'App\Http\Controllers\AbonnementController@cancelle');
     Route::post('abonnement/nouvelle', 'App\Http\Controllers\AbonnementController@nouvelle');
@@ -60,8 +54,6 @@ Route::middleware('auth:api')->group(function() {
     Route::post('abonnement/addMost', 'App\Http\Controllers\AbonnementController@addMost');
     Route::post('abonnement/imprimer', 'App\Http\Controllers\AbonnementController@imprimer');
     Route::post('abonnement/paye', 'App\Http\Controllers\AbonnementController@paye');
-    
-    Route::apiResource('abonnement', 'App\Http\Controllers\AbonnementController');
     
     Route::post('abonne/uploadAvatar', 'App\Http\Controllers\AbonneController@uploadAvatar');
     Route::get('abonne/removeAvatar/{abonne_id}', 'App\Http\Controllers\AbonneController@removeAvatar');

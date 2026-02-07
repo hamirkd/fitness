@@ -6,39 +6,35 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Facture extends Model
+class AbonnementAll extends Model
 {
+    protected $table = 'fit_abonnements';
     use HasFactory;
     use SoftDeletes;
     /**
     * @var array
     */
    protected $fillable = [
-    'client_id',
+    'abonne_id',
     'nom',
     'prenom',
-    'numerocompteur',
-    'typeclient',
-    'periode',
-    'ancienindex',
-    'nouveauindex',
-    'consommation',
-    'prixunitaire',
+    'date_debut',
+    'date_fin',
+    'duree',
     'tarif_id',
     'montant',
-    'redevance',
-    'montanttotal',
-    'etat',
     'cancelled_at',
     'motif',
-    'datepaiement',
-    'dateecheance',
     'updated_by',
     'created_by'
     ];
-    public function getClientAttribute()
+    public function getAbonneAttribute()
     {
-        return Client::find($this->client_id);
+        return Abonne::find($this->abonne_id);
     }
-    protected $appends = ['client'];
+    public function getTarifAttribute()
+    {
+        return Tarif::find($this->tarif_id);
+    }
+    protected $appends = ['abonne', 'tarif'];
 }

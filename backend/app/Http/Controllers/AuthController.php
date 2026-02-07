@@ -178,7 +178,17 @@ class AuthController extends Controller
     // } 
     public function getAvatar(){
         $user = Auth::user();
-        return response()->file('..\storage\app\public\uploads\\PROFIL\\'.$user->avatar);
+
+        $path = 'uploads/PROFIL/' . $user->avatar;
+
+        if (!Storage::disk('public')->exists($path)) {
+            return response()->json([
+                'message' => 'Fichier non trouvé sur le serveur'
+            ], 404);
+        }
+
+        return Storage::disk('public')->response($path);
+
     }
     
     public function removeAvatar(){

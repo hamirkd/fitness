@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>{{action=='new'?'Faire un abonnement':'Modifier le\'abonnement de '+abonnement.nom+' '+abonnement.prenom}}</h2>
+<mat-dialog-content class="  sm:p-6 w-full">
+
+
+    <form class=" " [formGroup]="abonnementForm">
+        <div class="flex flex-col w-full ">
+
+            
+            <div class="flex">
+                <mat-form-field class="w-full pr-2">
+                    <mat-label>Abonnee</mat-label>
+                    <mat-select [formControlName]="'abonne_id'" required>
+                        <mat-option [value]="abonne.id"  *ngFor="let abonne of abonnes" >{{abonne.nom}} {{abonne.prenom}} [{{abonne.telephone}}]</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="flex">
+                <mat-form-field class="w-full pr-2">
+                    <mat-label>Tarif</mat-label>
+                    <mat-select [formControlName]="'tarif_id'" required>
+                        <mat-option [value]="tarif.id"  *ngFor="let tarif of tarifs" >{{tarif.code}} {{tarif.libelle}} [{{tarif.montant}}]</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close cdkFocusInitial>Annuler</button>
+    <button mat-button (click)="onSubmit()" [disabled]="!abonnementForm.valid">
+        {{action=='new'?'Enregister':'Modifier'}}</button>
+</mat-dialog-actions>

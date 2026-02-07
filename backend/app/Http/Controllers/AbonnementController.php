@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use MBence\OpenTBSBundle\Services\OpenTBS;
-use App\Models\Client;
+use App\Models\Abonne;
 use App\Models\Abonnement;
+use App\Models\AbonnementAll;
 use App\Models\Tarif;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -38,73 +39,26 @@ class AbonnementController extends Controller
             $abonnement = Abonnement::find($request['id']);
             $abonnement->update(MyFunction::audit($request->all()));
             return response()->json([
-                'message' => "La abonnement a été mise à jour",
+                'message' => "L'abonnement a été mise à jour",
                 'status' => 200
             ], 200);
         }
-        Abonnement::create(MyFunction::audit($request->all()));
+        $abonnement = $request->all();
+        $abonne = Abonne::find($abonnement['abonne_id']);
+        $abonnement['nom'] = $abonne->nom;
+        $abonnement['prenom'] = $abonne->prenom;
+
+        $tarif = Tarif::find($abonnement['tarif_id']);
+        $abonnement['montant'] = $tarif->montant;
+        $abonnement['duree'] = $tarif->duree;
+        $abonnement['date_debut'] = Carbon::now();
+        $abonnement['date_fin'] = Carbon::now()->addDays($tarif->duree);
+
+        Abonnement::create(MyFunction::audit($abonnement));
         return response()->json([
-            'message' => 'Ajout d\'une nouvelle abonnement',
+            'message' => 'Ajout d\'un nouveau abonnement',
             'status' => 200
         ], 200);
-    }
-    /**
-     * Création des abonnements d'une période données.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function nouvelle(Request $request)
-    {
-        $abonnements = Abonnement::where('periode', '=', $request['periode'])->get();
-        $abonnementPasse = array();
-        if (count($abonnements)>0) {
-            $abonnementPasse = Abonnement::where('periode', '>', $abonnements[0]['periode'])->get();
-        }
-        
-        if (count($abonnementPasse)>0) {
-            return response()->json([
-                'message' => "Impossible de générer des abonnements anciennes si des nouvelles abonnements existent",
-                'status' => 409
-            ], 409);
-        }
-        if (count($abonnements) > 0) {
-            if ($request['type'] && $request['type'] == 'REGENERE') {
-                Abonnement::where('periode', '=', $request['periode'])->delete();
-            } else
-            return response()->json([
-                'message' => "Il existe déjà des abonnements générées à cette période",
-                'status' => 200
-            ], 403);
-        }
-        $clients = Client::all();
-        $tarifs = Tarif::all();
-        
-        if (count($tarifs) < 2) {
-            return response()->json([
-                'message' => "Veuillez saisir les tarifications ORDINAIRE ET ENTREPRISE",
-                'status' => 200
-            ], 404);
-        }
-        $setTarifs = [];
-        foreach ($tarifs as $tarif) {
-            $setTarifs[$tarif->typetarif] = $tarif;
-        }
-        foreach ($clients as $client) {
-            Abonnement::create(MyFunction::audit([
-                'client_id'=> $client->id,
-                'nom'=>$client->nom,
-                'prenom'=>$client->prenom,
-                'periode'=>$request->periode,
-                'typeclient'=>$client->typeclient,
-                'ancienindex'=>$client->ancienindex,
-                'tarif_id'=>$setTarifs[$client->typeclient]->id,
-                'prixunitaire'=>$setTarifs[$client->typeclient]->montant,
-                'redevance'=>$setTarifs[$client->typeclient]->redevance,
-                'etat'=> 'NONPAYE'
-            ]));
-        }
-        return Abonnement::where('periode', '=', $request['periode'])->get();
     }
 
     /**
@@ -115,71 +69,58 @@ class AbonnementController extends Controller
      */
     public function findBy(Request $request)
     {
-        if ($request['periode']) {
-            return Abonnement::where('periode', '=', $request['periode'])->get();
-        }
         if ($request['datedebut'] && $request['datefin'])
-        return Abonnement::whereBetween('periode', [$request['datedebut'] , $request['datefin']])->get();
+        $abonnements = Abonnement::whereBetween('created_at', [$request['datedebut'] , $request['datefin']])->get();
     
         if ($request['etat']) {
-            return Abonnement::where('etat', '=', $request['etat'])->get();
+            $abonnements = Abonnement::where('etat', '=', $request['etat'])->get();
         }
-        if ($request['client_id']) {
-            return Abonnement::where('client_id', '=', $request['client_id'])->get();
+        if ($request['abonnement_id']) {
+            $abonnements = Abonnement::where('abonnement_id', '=', $request['abonnement_id'])->get();
         }
-    }
+        $abonnements = Abonnement::get();
 
-    
-    /**
-     * Création des abonnements d'une période données.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function addMost(Request $request)
-    {
-        $abonnements = $request['abonnements'];
-        // Impossible de modifier les anciennes abonnements si des nouvelles abonnements existent
-        $abonnementPasse = Abonnement::where('periode', '>', $abonnements[0]['periode'])->get();
-        if (count($abonnementPasse)>0) {
-            return response()->json([
-                'message' => "Impossible de modifier les anciennes abonnements si des nouvelles abonnements existent",
-                'status' => 409
-            ], 409);
-        }
+        $today = Carbon::today();
+        
         foreach ($abonnements as $abonnement) {
-            if(isset($abonnement['id'])&&$abonnement['id']>0){
-                $abonnementt = Abonnement::find($abonnement['id']);
-                
-                if ($abonnement['etat'] !== 'PAYE') {
-                    $abonnementt->update(MyFunction::audit($abonnement));
-                    Client::find($abonnement['client_id'])->update(["ancienindex"=>$abonnement['nouveauindex']]);
-                }
+            if ($abonnement->date_fin && Carbon::parse($abonnement->date_fin)->lt($today)) {
+                $abonnement->etat = 'EXPIRE';
+                // si tu veux sauvegarder en base :
+                // $abonnement->save();
             } else {
-                return response()->json([
-                    'message' => "Cette abonnement n'existe pas, veuillez verifier à nouveau",
-                    'status' => 409
-                ], 409);
+                $abonnement->etat = 'ENCOURS';
             }
         }
-        return response()->json([
-            'message' => "Les abonnements ont été mise à jour",
-            'status' => 200
-        ], 200);
+        
+        return $abonnements;
     }
+
 
     public function imprimer(Request $request)
     {
         
         setlocale(LC_TIME, 'fr_FR.UTF-8');
-        $abonnements = Abonnement::where('periode', '=', $request['periode']);
+        $abonnements = AbonnementAll::where('periode', '=', $request['periode']);
         if ($request['id']) {
-            $abonnements =  Abonnement::where('id', '=', $request['id']);
+            $abonnements =  AbonnementAll::where('id', '=', $request['id']);
         }
-        if ($request['client_id']) {
-            $abonnements =  Abonnement::where('client_id', '=', $request['client_id']);
+        if ($request['abonne_id']) {
+            $abonnements =  AbonnementAll::where('abonne_id', '=', $request['abonne_id']);
+        }
+        if ($request['tarif_id']) {
+            $abonnements =  AbonnementAll::where('tarif_id', '=', $request['tarif_id']);
         }
         $abonnements = $abonnements->get();
+        $today = Carbon::today();
+        foreach ($abonnements as $abonnement) {
+            if ($abonnement->date_fin && Carbon::parse($abonnement->date_fin)->lt($today)) {
+                $abonnement->etat = 'EXPIRE';
+                // si tu veux sauvegarder en base :
+                // $abonnement->save();
+            } else {
+                $abonnement->etat = 'ENCOURS';
+            }
+        }
         $title = 'Abonnement';
         $html = view('abonnement', ['title' => $title,
         'abonnements' => $abonnements])->render();
@@ -190,7 +131,7 @@ class AbonnementController extends Controller
         // $dompdf->setPaper('A4', 'portrait');
         $dompdf->setPaper('A6', 'portrait');
         $dompdf->render();
-        $outputPath = storage_path('app/public/temp/FACTURE.pdf');
+        $outputPath = storage_path('app/public/temp/ABONNEMENT.pdf');
 
         file_put_contents($outputPath, $dompdf->output());
         return response()->file($outputPath, ['Content-Type' => 'application/pdf']);

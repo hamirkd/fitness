@@ -6,30 +6,33 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Facture extends Model
+class Abonnement extends Model
 {
+    protected $table = 'fit_abonnements';
     use HasFactory;
     use SoftDeletes;
     /**
     * @var array
     */
    protected $fillable = [
-    'client_id',
+    'abonne_id',
     'nom',
     'prenom',
-    'periode',
-    'ancienindex',
-    'nouveauindex',
-    'consommation',
-    'prixunitaire',
+    'date_debut',
+    'date_fin',
+    'duree',
     'tarif_id',
     'montant',
-    'redevance',
-    'montanttotal',
-    'etat ',
-    'datepaiement',
-    'dateecheance',
+    'cancelled_at',
+    'motif',
     'updated_by',
     'created_by'
     ];
+    public function getCreatedAttribute()
+    {
+        $user =  Utilisateur::find($this->created_by);
+        return $user->first_name.' '.$user->last_name;
+    }
+    protected $appends = ['created'];
+
 }
