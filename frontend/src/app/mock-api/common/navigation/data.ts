@@ -25,10 +25,10 @@ export const defaultNavigation: FuseNavigationItem[] = [
     },
     {
         id: 'client',
-        title: 'Client',
+        title: 'Abonné',
         type: 'basic',
         icon: 'iconsmind:business_manwoman',
-        link: '/client',
+        link: '/abonnes',
         roles: 'USER,ADMIN,SCOLARITE,DIRECTEUR,SECRETAIRE'
     },
     {

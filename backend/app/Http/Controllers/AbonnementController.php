@@ -52,7 +52,7 @@ class AbonnementController extends Controller
         $abonnement['montant'] = $tarif->montant;
         $abonnement['duree'] = $tarif->duree;
         $abonnement['date_debut'] = Carbon::now();
-        $abonnement['date_fin'] = Carbon::now()->addDays($tarif->duree);
+        $abonnement['date_fin'] = Carbon::now()->addDays($tarif->duree -1);
 
         Abonnement::create(MyFunction::audit($abonnement));
         return response()->json([
@@ -70,15 +70,18 @@ class AbonnementController extends Controller
     public function findBy(Request $request)
     {
         if ($request['datedebut'] && $request['datefin'])
-        $abonnements = Abonnement::whereBetween('created_at', [$request['datedebut'] , $request['datefin']])->get();
+        $abonnements = Abonnement::whereBetween('created_at', [$request['datedebut'] , $request['datefin']]);
     
         if ($request['etat']) {
-            $abonnements = Abonnement::where('etat', '=', $request['etat'])->get();
+            $abonnements = Abonnement::where('etat', '=', $request['etat']);
         }
         if ($request['abonnement_id']) {
-            $abonnements = Abonnement::where('abonnement_id', '=', $request['abonnement_id'])->get();
+            $abonnements = Abonnement::where('abonnement_id', '=', $request['abonnement_id']);
         }
-        $abonnements = Abonnement::get();
+        if ($request['abonne_id']) {
+            $abonnements = Abonnement::where('abonne_id', '=', $request['abonne_id']);
+        }
+        $abonnements=$abonnements->orderBy('id','DESC')->get();
 
         $today = Carbon::today();
         
@@ -185,12 +188,6 @@ class AbonnementController extends Controller
     public function cancelle(Request $request)
     {
         $abonnement = Abonnement::find($request->id);
-        if ($abonnement->etat == 'PAYE') {
-            return response()->json([
-                'message' => "Cette abonnement a déjà été payée",
-                'status' => 409
-            ], 409);
-        }
          
         return $abonnement->update(["cancelled_at"=>now(),"motif"=>$request->motif]);
     }
