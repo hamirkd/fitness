@@ -39,8 +39,8 @@ export class AbonnementComponent implements OnInit {
     searchControl: FormControl = new FormControl();
     datedebutControl: FormControl = new FormControl();
     datefinControl: FormControl = new FormControl();
-    datedebut = moment().day(1).format('YYYY-MM-DD');
-    datefin = moment().day(7).format('YYYY-MM-DD');
+    datedebut = moment().subtract(7, 'days').format('YYYY-MM-DD');
+    datefin = moment().add(14, 'days').format('YYYY-MM-DD');
 
     abonnements: Abonnement[] = [];
     dataSource: MatTableDataSource<Abonnement> = new MatTableDataSource();

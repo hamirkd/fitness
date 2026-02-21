@@ -46,14 +46,14 @@ Route::middleware('auth:api')->group(function() {
     Route::apiResource('tarif', 'App\Http\Controllers\TarifController');
     
     
-    Route::apiResource('abonnement', 'App\Http\Controllers\AbonnementController');
+    Route::post('abonnement/cancelle', 'App\Http\Controllers\AbonnementController@cancelled_at');
     Route::post('abonnement/restore', 'App\Http\Controllers\AbonnementController@restore');
-    Route::post('abonnement/cancelle', 'App\Http\Controllers\AbonnementController@cancelle');
     Route::post('abonnement/nouvelle', 'App\Http\Controllers\AbonnementController@nouvelle');
     Route::post('abonnement/findBy', 'App\Http\Controllers\AbonnementController@findBy');
     Route::post('abonnement/addMost', 'App\Http\Controllers\AbonnementController@addMost');
     Route::post('abonnement/imprimer', 'App\Http\Controllers\AbonnementController@imprimer');
     Route::post('abonnement/paye', 'App\Http\Controllers\AbonnementController@paye');
+    Route::apiResource('abonnement', 'App\Http\Controllers\AbonnementController');
     
     Route::post('abonne/uploadAvatar', 'App\Http\Controllers\AbonneController@uploadAvatar');
     Route::get('abonne/removeAvatar/{abonne_id}', 'App\Http\Controllers\AbonneController@removeAvatar');

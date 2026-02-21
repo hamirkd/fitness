@@ -26,3 +26,8 @@ Route::group([
 ], function ($router) {
     Route::get('qr-code', [QRCodeController::class, 'index']);
 });
+Route::group([
+    'prefix' => 'web'
+], function ($router) {
+    Route::get('qr-code/{token}', [QRCodeController::class, 'index']);
+});

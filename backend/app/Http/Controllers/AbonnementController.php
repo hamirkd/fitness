@@ -52,7 +52,7 @@ class AbonnementController extends Controller
         $abonnement['montant'] = $tarif->montant;
         $abonnement['duree'] = $tarif->duree;
         $abonnement['date_debut'] = Carbon::now();
-        $abonnement['date_fin'] = Carbon::now()->addDays($tarif->duree -1);
+        $abonnement['date_fin'] = Carbon::now()->addDays($tarif->duree-1);
 
         Abonnement::create(MyFunction::audit($abonnement));
         return response()->json([
@@ -69,7 +69,8 @@ class AbonnementController extends Controller
      */
     public function findBy(Request $request)
     {
-        if ($request['datedebut'] && $request['datefin'])
+        $abonnements = null;
+        if ($request['datedebut'] && $request['datefin']) 
         $abonnements = Abonnement::whereBetween('created_at', [$request['datedebut'] , $request['datefin']]);
     
         if ($request['etat']) {
@@ -81,6 +82,11 @@ class AbonnementController extends Controller
         if ($request['abonne_id']) {
             $abonnements = Abonnement::where('abonne_id', '=', $request['abonne_id']);
         }
+        
+        if ($abonnements == null) {
+            $abonnements = Abonnement::orderBy('id', 'DESC');
+        }
+        
         $abonnements=$abonnements->orderBy('id','DESC')->get();
 
         $today = Carbon::today();
@@ -185,11 +191,32 @@ class AbonnementController extends Controller
         $abonnement->delete();
     }
     
-    public function cancelle(Request $request)
+    public function cancelled_at(Request $request)
     {
-        $abonnement = Abonnement::find($request->id);
-         
-        return $abonnement->update(["cancelled_at"=>now(),"motif"=>$request->motif]);
+        $request->validate([
+            'id'    => 'required|exists:fit_abonnements,id',
+            'motif' => 'required|string|max:255',
+        ]);
+    
+        $abonnement = Abonnement::findOrFail($request->id);
+    
+        if ($abonnement->etat === 'PAYE') {
+            return response()->json([
+                'message' => "Cet abonnement a déjà été payé",
+                'status'  => 409
+            ], 409);
+        }
+    
+        $abonnement->update([
+            'cancelled_at' => now(),
+            'motif'        => $request->motif
+        ]);
+    
+        return response()->json([
+            'message' => "Abonnement annulé avec succès",
+            'status'  => 200,
+            'data'    => $abonnement
+        ]);
     }
 
     public function restore(Request $request)

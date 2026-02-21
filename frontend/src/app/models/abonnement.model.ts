@@ -19,6 +19,7 @@ export class Abonnement {
     abonne: Abonne;   
     tarif: Tarif;
     nomprenom: string;
+    cancelled_at: string;
 
     constructor(abonnement:any){
         this.id = abonnement.id;
@@ -38,5 +39,6 @@ export class Abonnement {
         this.nomprenom = abonnement.nom + ' ' + abonnement.prenom;
         this.updated_by = abonnement.updated_by;
         this.created_by = abonnement.created;   
+        this.cancelled_at = abonnement.cancelled_at;   
     }
 }
