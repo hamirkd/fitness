@@ -25,6 +25,7 @@ class Abonnement extends Model
     'montant',
     'cancelled_at',
     'motif',
+    'mode_paiement','date_pause',
     'updated_by',
     'created_by'
     ];

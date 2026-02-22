@@ -20,7 +20,7 @@ class QRCodeController extends Controller
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
         $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'];
         $server_url = $protocol . '://' . $host . "/backend/public/index.php/web/qr-code/" .uniqid();
-        $server_url = $protocol . '://' . $host . "//qr-code/" .uniqid();
+        $server_url = $protocol . '://' . $host . "/qr-code/participer/" .uniqid();
 
         return QrCode::size(400)->generate($server_url);
         // $image = QrCode::format('png')

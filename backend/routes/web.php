@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QRCodeController;
+use App\Http\Controllers\SeanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +31,5 @@ Route::group([
     'prefix' => 'web'
 ], function ($router) {
     Route::get('qr-code/{token}', [QRCodeController::class, 'index']);
+    Route::post('participe-seance', [SeanceController::class, 'store']);
 });

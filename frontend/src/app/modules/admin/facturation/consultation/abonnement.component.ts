@@ -53,6 +53,7 @@ export class AbonnementComponent implements OnInit {
         'duree',
         'montant',
         'etat',
+        'mode_paiement',
         'actions',
     ];
 
@@ -203,11 +204,12 @@ export class AbonnementComponent implements OnInit {
       ajouterButton(){
 
         this.dialogRef = this._matDialog.open(AddAbonnementComponent, {
-            panelClass: 'w-full',
+            panelClass: 'w-1/2',
             data      : {
                 abonnement:{},
                 action: 'new'
-            } 
+            },
+            disableClose: true
         });
   
         this.dialogRef.afterClosed()
@@ -219,5 +221,26 @@ export class AbonnementComponent implements OnInit {
                 
                 this._updateDataSource();
             });
+      }
+      calculeNombreEtMontant(etat: string): {nombre: number, montant: number} {
+        const result = {montant: 0, nombre: 0};
+        this.abonnements.forEach(abonnement => {
+            if (abonnement.etat === etat || !etat) {
+                result.montant = result.montant + abonnement.montant;
+                result.nombre = result.nombre + 1;
+            }
+        });
+        return result
+      }
+
+      calculeNombreEtMontantMode(mode: string): {nombre: number, montant: number} {
+        const result = {montant: 0, nombre: 0};
+        this.abonnements.forEach(abonnement => {
+            if (abonnement.mode_paiement === mode || !mode) {
+                result.montant = result.montant + abonnement.montant;
+                result.nombre = result.nombre + 1;
+            }
+        });
+        return result
       }
 }

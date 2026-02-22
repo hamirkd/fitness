@@ -20,7 +20,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         title: 'Abonnement',
         type: 'basic',
         icon: 'iconsmind:students',
-        link: '/abonnement',
+        link: '/abonnement/consultation',
         roles: 'USER,ADMIN'
     },
     {

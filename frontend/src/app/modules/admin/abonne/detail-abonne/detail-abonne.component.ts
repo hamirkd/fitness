@@ -51,6 +51,7 @@ export class DetailAbonneComponent implements OnInit {
         'duree',
         'montant',
         'etat',
+        'mode_paiement',
         'created_by',
         'actions'
     ];
@@ -261,11 +262,12 @@ export class DetailAbonneComponent implements OnInit {
     ajouterButton(){
         this.data['btnadd'] = true;
         this.dialogRef = this._matDialog.open(AddAbonnementComponent, {
-            panelClass: 'w-full',
+            panelClass: 'w-1/2',
             data      : {
                 abonnement:{abonne_id: this.abonne_id},
                 action: 'new'
-            } 
+            },
+            disableClose: true
         });
   
         this.dialogRef.afterClosed()
@@ -276,6 +278,53 @@ export class DetailAbonneComponent implements OnInit {
                     return;
                 }
                 this.data['btnadd'] = false;
+                
+                this._updateDataSourceAbonnement();
+            });
+      }
+      modifierAbonnementButton(abonnement: Abonnement){
+        this.data['btnadd'] = true;
+        this.dialogRef = this._matDialog.open(AddAbonnementComponent, {
+            panelClass: 'w-1/2',
+            data      : {
+                abonnement: abonnement,
+                action: 'update'
+            },
+            disableClose: true
+        });
+  
+        this.dialogRef.afterClosed()
+            .subscribe((response: FormGroup) => {
+                if ( !response )
+                {
+                    this.data['btnadd'] = false;
+                    return;
+                }
+                this.data['btnadd'] = false;
+                
+                this._updateDataSourceAbonnement();
+            });
+      }
+
+      mettreEnPauseAbonnementButton(abonnement: Abonnement){
+        this.data['pause'] = true;
+        this.dialogRef = this._matDialog.open(AddAbonnementComponent, {
+            panelClass: 'w-1/2',
+            data      : {
+                abonnement: abonnement,
+                action: 'pause'
+            },
+            disableClose: true
+        });
+  
+        this.dialogRef.afterClosed()
+            .subscribe((response: FormGroup) => {
+                if ( !response )
+                {
+                    this.data['pause'] = false;
+                    return;
+                }
+                this.data['pause'] = false;
                 
                 this._updateDataSourceAbonnement();
             });

@@ -8,6 +8,7 @@ import { AddTarifComponent } from './tarif/add-tarif/add-tarif.component';
 import { AbonnementComponent } from './consultation/abonnement.component';
 import { AddAbonnementComponent } from './add-abonnement/add-abonnement.component';
 import { AbonnementMotifAnnulationComponent } from './consultation/abonnement-motif-annulation/abonnement-motif-annulation.component';
+import { RecapAbonnementComponent } from './add-abonnement/recap-abonnement.component';
 
 
 const routes: Routes = [
@@ -24,7 +25,8 @@ const routes: Routes = [
     AbonnementComponent,
     TarifComponent,
     AddTarifComponent,
-    AddAbonnementComponent, AbonnementMotifAnnulationComponent
+    AddAbonnementComponent, AbonnementMotifAnnulationComponent,
+    RecapAbonnementComponent
   ],
   imports: [
     CommonModule,

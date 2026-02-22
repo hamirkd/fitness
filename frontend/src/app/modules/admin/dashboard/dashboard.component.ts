@@ -27,11 +27,12 @@ export class DashboardComponent implements OnInit {
 
   ajouterButton() {
     this.dialogRef = this._matDialog.open(AddAbonnementComponent, {
-      panelClass: 'w-1/3',
+      panelClass: 'w-1/2',
       data: {
         abonnement: {},
         action: 'new'
-      }
+      },
+      disableClose: true
     });
 
     this.dialogRef.afterClosed()

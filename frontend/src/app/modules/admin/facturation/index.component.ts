@@ -56,7 +56,8 @@ export class AbonnementIndexComponent implements OnInit {
       data: {
         abonnement: {},
         action: 'new'
-      }
+      },
+      disableClose: true,
     });
 
     this.dialogRef.afterClosed()

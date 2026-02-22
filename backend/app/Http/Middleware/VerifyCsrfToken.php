@@ -13,5 +13,6 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
+        'web/participe-seance', // Exclut toutes les routes commençant par api/seances/
     ];
 }

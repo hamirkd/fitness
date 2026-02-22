@@ -9,28 +9,36 @@
     <meta content="DAO Hamadou" name="author" />
     <link rel="shortcut icon" href="{{ URL::asset('assets/images/logo.png') }}" type="image/x-icon">
 
-    <style>
-        @page {
-            margin-top: 10px;
-            margin-bottom: 5px;
-        }
-    </style>
+    
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 15px;
+      margin: 0;
+      /* padding: 2mm; */
+      width: 74mm; /* format A7 */
+      word-wrap: break-word;
+    }
+    .center { text-align: center; margin: 0; padding: 0; }
+    .right { text-align: right; }
+    .bold { font-weight: bold; }
+    .line { border-top: 1px dashed #000; margin: 4px 0; }
+    .block { margin: 2px 0; }
+    .small { font-size: 11px; }
+    img { display: block; margin: 0 auto; max-height: 150px; } /* logo réduit */
+    @page {
+      size: A5;
+      margin: 0; /* supprime les marges du haut et bas */
+    }
+  </style>
 </head>
 
 <body>
 @foreach($abonnements as $data)
 <div style="page-break-inside: avoid;">
 
-<div style="
-    max-width: 90mm;
-    padding: 8px;
-    font-family: Arial, sans-serif;
-    border: 1px dashed #333;
-    border-radius: 8px;
-    font-size: 10px;
-">
     <h3 style="text-align:center; margin-bottom:5px;">
-        🎫 TICKET D’ABONNEMENT ECAF FITNESS
+        TICKET D’ABONNEMENT ECAF FITNESS
     </h3>
 
     <hr style="border:0.5px solid #000;">
@@ -48,9 +56,9 @@
             <tr>
                 <td><strong>Période</strong></td>
                 <td>
-                    Du {{ \Carbon\Carbon::parse($data->date_debut)->format('d/m/Y') }}
+                    DEBUT : {{ \Carbon\Carbon::parse($data->date_debut)->format('d/m/Y') }}
                     <br>
-                    Au {{ \Carbon\Carbon::parse($data->date_fin)->format('d/m/Y') }}
+                    EXPIRE : {{ \Carbon\Carbon::parse($data->date_fin)->format('d/m/Y') }}
                 </td>
             </tr>
             <tr>
@@ -86,7 +94,6 @@
     <p style="text-align:center; font-size:8px; color:#888;">
         ECAF FITNESS • Discipline • Performance • Santé
     </p>
-</div>
 </div>
 @endforeach
 </body>

@@ -1,11 +1,9 @@
-<h2 mat-dialog-title>{{action=='new'?'Faire un abonnement':'Modifier le\'abonnement de '+abonnement.nom+' '+abonnement.prenom}}</h2>
+<h2 mat-dialog-title>{{action=='new'?'Faire un abonnement':'Modifier l\'abonnement de '+abonnement.nom+' '+abonnement.prenom}}</h2>
 <mat-dialog-content class="  sm:p-6 w-full">
 
 
     <form class=" " [formGroup]="abonnementForm">
         <div class="flex flex-col w-full ">
-
-            
             <div class="flex">
                 <mat-form-field class="w-full pr-2">
                     <mat-label>Abonnee</mat-label>
@@ -19,6 +17,38 @@
                     <mat-label>Tarif</mat-label>
                     <mat-select [formControlName]="'tarif_id'" required>
                         <mat-option [value]="tarif.id"  *ngFor="let tarif of tarifs" >{{tarif.code}} {{tarif.libelle}} [{{tarif.montant}}]</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="flex flex-col w-full " *ngIf="tarifSelected()">
+            <div class="flex">
+                <mat-form-field class="w-1/2 pr-2">
+                    <mat-label>Date debut</mat-label>
+                    <input type="date" matInput [formControlName]="'date_debut'" (change)="onSelectDateDebut($event)">
+                </mat-form-field>
+                <mat-form-field class="w-1/2 pr-2">
+                    <mat-label>Date fin</mat-label>
+                    <input type="date" matInput [formControlName]="'date_fin'">
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="flex flex-col w-full " *ngIf="action=='pause'">
+            <div class="flex">
+                <mat-form-field class="w-1/2 pr-2">
+                    <mat-label>Date pause</mat-label>
+                    <input type="date" matInput [formControlName]="'date_pause'">
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="flex flex-col w-full" *ngIf="tarifSelected()">
+            <div class="flex">
+                <mat-form-field class="w-full pr-2">
+                    <mat-label>Mode de paiement</mat-label>
+                    <mat-select [formControlName]="'mode_paiement'" required>
+                        <mat-option [value]="mode"  *ngFor="let mode of mode_paiements" >{{mode}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>

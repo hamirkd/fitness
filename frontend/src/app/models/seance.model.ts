@@ -1,4 +1,4 @@
-export class Tarif {
+export class Seance {
     id:number
     montant:string
     duree:number

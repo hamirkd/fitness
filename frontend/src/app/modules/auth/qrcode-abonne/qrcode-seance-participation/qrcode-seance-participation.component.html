@@ -1,0 +1,69 @@
+<div class="flex flex-col sm:flex-row flex-auto min-w-0">
+    <div
+      class="flex items-center justify-center
+             w-full h-full py-8 px-4 sm:p-12 md:p-16
+             sm:rounded-2xl md:rounded-none
+             sm:shadow md:shadow-none sm:bg-card">
+  
+      <div class="flex flex-col items-center space-y-6" *ngIf="!abonneInfo">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center" *ngIf="verification">
+            Bienvenue et merci de votre présence !
+                </h2>
+  
+        <p class="text-center text-gray-700 max-w-xl
+        text-lg sm:text-xl md:text-2xl leading-relaxed" *ngIf="verification">
+            Veuillez saisir votre numéro de téléphone ou email
+        </p>
+
+        <form class="mt-8" [formGroup]="seanceForm" #seanceNgForm="ngForm">
+
+            <!-- Email field -->
+            <mat-form-field class="w-full">
+                <mat-label>Adresse E-mail / téléphone</mat-label>
+                <input id="telephone" matInput [formControlName]="'telephone'">
+                <mat-error *ngIf="seanceForm.get('telephone').hasError('required')">
+                    Adresse E-mail ou téléphone obligatoire
+                </mat-error>
+            </mat-form-field>
+
+            <!-- Submit button -->
+            <button class="fuse-mat-button-large w-full mt-6" mat-flat-button [color]="'primary'" [disabled]="seanceForm.disabled" (click)="participer()">
+                <span *ngIf="!seanceForm.disabled">
+                    participer
+                </span>
+                <mat-progress-spinner
+                    *ngIf="seanceForm.disabled"
+                    [diameter]="24"
+                    [mode]="'indeterminate'"></mat-progress-spinner>
+            </button>
+        </form>
+  
+  
+    </div>
+
+    <div class="flex flex-col items-center space-y-6" *ngIf="abonneInfo">
+  
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center">
+            Bienvenue {{abonneInfo.abonne.nom }} {{abonneInfo.abonne.prenom }}
+                </h2>
+                <h2> et merci de votre présence !</h2>
+  
+                <div class="mt-4 bg-white p-4 rounded-lg">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-500">Abonnement</p>
+                            <p class="font-semibold">{{abonneInfo.abonnement_utilise?.tarif.libelle}}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Validité</p>
+                            <p class="font-semibold">Jusqu'au {{abonneInfo.abonnement_utilise?.date_fin | date:'dd/MM/yyyy'}}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Nombre de seance</p>
+                            <p class="font-semibold">{{abonneInfo.nombre_seance || '0'}}</p>
+                        </div>
+                    </div>
+                </div>
+    </div>
+  </div>
+  

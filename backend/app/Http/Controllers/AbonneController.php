@@ -27,6 +27,16 @@ class AbonneController extends Controller
      */
     public function store(Request $request)
     {
+        $abonne = Abonne::where('telephone', $request->telephone)
+                ->orWhere('email', $request->email)
+                ->first();
+        if ($abonne) {
+            return response()->json([
+                'message' => "Ce numéro existe déjà pour l'abonné {$abonne->nom} {$abonne->prenom}",
+                'status' => 400
+            ], 400);
+        }
+
         Abonne::create(MyFunction::audit($request->all()));
         return response()->json([
             'message' => 'Un nouveau abonné a été ajoutée',

@@ -18,7 +18,7 @@ export class AbonnementService {
     return this.apiService.get('api/abonnement/'+id);
   }
 
-  add(abonnement: Abonnement): Observable<Abonnement> {
+  add(abonnement: Abonnement): Observable<{abonnement:Abonnement, message: string}> {
       return this.apiService.post('api/abonnement', abonnement);
   }
 

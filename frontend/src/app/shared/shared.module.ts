@@ -67,7 +67,7 @@ import { QrCodeAbonneModule } from 'app/modules/auth/qrcode-abonne/qrcode-abonne
         MatOptionModule,
         MatSelectModule,MatSnackBarModule,
         MatNativeDateModule, MatMomentDateModule, TranslateModule,
-        QrCodeAbonneModule
+        QrCodeAbonneModule,
 
     ],
     providers: [TranslateService]

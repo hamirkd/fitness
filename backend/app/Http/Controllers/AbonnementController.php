@@ -51,12 +51,16 @@ class AbonnementController extends Controller
         $tarif = Tarif::find($abonnement['tarif_id']);
         $abonnement['montant'] = $tarif->montant;
         $abonnement['duree'] = $tarif->duree;
-        $abonnement['date_debut'] = Carbon::now();
-        $abonnement['date_fin'] = Carbon::now()->addDays($tarif->duree-1);
+        if ($abonnement['date_debut'] == null) {
+            $abonnement['date_debut'] = Carbon::now();
+            $abonnement['date_fin'] = Carbon::now()->addDays($tarif->duree-1);
+        }
 
-        Abonnement::create(MyFunction::audit($abonnement));
+        $abonnement = Abonnement::create(MyFunction::audit($abonnement));
+        $abonnement =  AbonnementAll::find($abonnement->id);
         return response()->json([
             'message' => 'Ajout d\'un nouveau abonnement',
+            'abonnement' => $abonnement,
             'status' => 200
         ], 200);
     }
@@ -92,12 +96,18 @@ class AbonnementController extends Controller
         $today = Carbon::today();
         
         foreach ($abonnements as $abonnement) {
-            if ($abonnement->date_fin && Carbon::parse($abonnement->date_fin)->lt($today)) {
+            if ($abonnement->date_fin && Carbon::parse($abonnement->date_fin)->lt($today)
+            && $abonnement->date_pause == null) {
                 $abonnement->etat = 'EXPIRE';
                 // si tu veux sauvegarder en base :
-                // $abonnement->save();
-            } else {
+                $abonnement->save();
+            } else if ($abonnement->date_pause != null) {
+                $abonnement->etat = 'PAUSE';
+                $abonnement->save();
+            }
+            else {
                 $abonnement->etat = 'ENCOURS';
+                $abonnement->save();
             }
         }
         
@@ -122,12 +132,17 @@ class AbonnementController extends Controller
         $abonnements = $abonnements->get();
         $today = Carbon::today();
         foreach ($abonnements as $abonnement) {
-            if ($abonnement->date_fin && Carbon::parse($abonnement->date_fin)->lt($today)) {
+            if ($abonnement->date_fin && Carbon::parse($abonnement->date_fin)->lt($today) && $abonnement->date_pause == null) {
                 $abonnement->etat = 'EXPIRE';
                 // si tu veux sauvegarder en base :
-                // $abonnement->save();
-            } else {
+                $abonnement->save();
+            } else if ($abonnement->date_pause != null) {
+                $abonnement->etat = 'PAUSE';
+                $abonnement->save();
+            }
+            else {
                 $abonnement->etat = 'ENCOURS';
+                $abonnement->save();
             }
         }
         $title = 'Abonnement';
@@ -138,7 +153,7 @@ class AbonnementController extends Controller
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
         // $dompdf->setPaper('A4', 'portrait');
-        $dompdf->setPaper('A6', 'portrait');
+        $dompdf->setPaper('A7', 'portrait');
         $dompdf->render();
         $outputPath = storage_path('app/public/temp/ABONNEMENT.pdf');
 
