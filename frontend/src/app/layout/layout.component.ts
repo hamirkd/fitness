@@ -9,6 +9,9 @@ import { FuseTailwindService } from '@fuse/services/tailwind/tailwind.service';
 import { FUSE_VERSION } from '@fuse/version';
 import { Layout } from 'app/layout/layout.types';
 import { AppConfig, Scheme, Theme } from 'app/core/config/app.config';
+import { MatDialog } from '@angular/material/dialog';
+import { EchoService } from 'app/core/services/echo.service';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector     : 'layout',
@@ -25,7 +28,8 @@ export class LayoutComponent implements OnInit, OnDestroy
     themes: [string, any][] = [];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     onRefreshed: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
-
+    currentUser:any;
+    notifications = [];
     /**
      * Constructor
      */
@@ -38,6 +42,9 @@ export class LayoutComponent implements OnInit, OnDestroy
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _fuseTailwindConfigService: FuseTailwindService,
         private _changeDetectorRef: ChangeDetectorRef,
+        private _userService:UserService,
+        private _matDialog: MatDialog,
+        private echoService: EchoService
     )
     {
     }
@@ -114,7 +121,21 @@ export class LayoutComponent implements OnInit, OnDestroy
         // Set the app version
         this._renderer2.setAttribute(this._document.querySelector('[ng-version]'), 'fuse-version', FUSE_VERSION);
         if(localStorage.getItem('layout'))this.setLayout(localStorage.getItem('layout'))
-    }
+    
+        this._userService.user$.subscribe(user=>{
+          this.currentUser=user;
+          this.echoService.echo
+          .channel('fitness-checkin')
+          .listen('.abonne.checked', (e: any) => {
+            this.notifications.unshift(e.payload);
+            this.playSound(e.payload.status);
+          });
+        });
+      }
+      playSound(status: string) {
+        const audio = new Audio(status === 'OK' ? 'assets/ok.mp3' : 'assets/ko.mp3');
+        audio.play();
+      }
 
     /**
      * On destroy

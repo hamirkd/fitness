@@ -6,6 +6,7 @@ import { ApiService } from 'app/core/services/api.service';
 import { UserService } from 'app/core/user/user.service';
 import { AddAbonnementComponent } from '../facturation/add-abonnement/add-abonnement.component';
 import { FormGroup } from '@angular/forms';
+import { EchoService } from 'app/core/services/echo.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,12 +18,26 @@ export class DashboardComponent implements OnInit {
   currentUser:any;
   svgContent!: SafeHtml;
   dialogRef: any;
+  notifications = [];
 
   constructor(private _userService:UserService,
-    private _matDialog: MatDialog) { }
+    private _matDialog: MatDialog,
+    private echoService: EchoService) { }
 
   ngOnInit(): void {
-    this._userService.user$.subscribe(user=>{this.currentUser=user;});
+    this._userService.user$.subscribe(user=>{
+      this.currentUser=user;
+      this.echoService.echo
+      .channel('fitness-checkin')
+      .listen('.abonne.checked', (e: any) => {
+        this.notifications.unshift(e.payload);
+        this.playSound(e.payload.status);
+      });
+    });
+  }
+  playSound(status: string) {
+    const audio = new Audio(status === 'OK' ? 'assets/ok.mp3' : 'assets/ko.mp3');
+    audio.play();
   }
 
   ajouterButton() {

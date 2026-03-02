@@ -69,7 +69,7 @@ export class AddAbonneComponent implements OnInit {
                 },
                 (err) => {
                     console.log(err);
-                    this._snackBar.open('Une erreur intervenue', 'Splash', {
+                    this._snackBar.open(err?.message, 'Splash', {
                       horizontalPosition: 'right',
                       verticalPosition: 'top',
                       duration:2000

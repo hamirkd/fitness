@@ -4,7 +4,9 @@
 
 export const environment = {
     production: false,
-    urlApi:"/"
+    urlApi:"/",
+    pusherKey: 'app-key',
+    pusherCluster:'mt1',
 };
 
 /*
