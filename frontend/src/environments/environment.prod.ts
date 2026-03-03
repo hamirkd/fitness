@@ -5,8 +5,10 @@ const url: string = location.origin.includes('geschool.ddns.net')? 'http://gesch
 export const environment = {
     production: true,
     urlApi: adresse,
-    pusherKey: 'app-key',
+    pusherKey: '2b34facefc03de20b0d2',
     pusherCluster:'mt1',
+    pusherAppId:'2122478',
+    pusherUrlApi: location.origin + "/",
 };
 
 // export const environment = {

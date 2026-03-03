@@ -36,7 +36,7 @@ export class QrcodeSeanceParticipationComponent implements OnInit {
   
     initForm(): void {
       this.seanceForm = this.formBuilder.group({
-        telephone: ['74000000', [Validators.required, Validators.minLength(8)]],
+        telephone: ['', [Validators.required, Validators.minLength(8)]],
         idUnique: [this.idUnique],
         caissierId: [this.caissierId]
       });

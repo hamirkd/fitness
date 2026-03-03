@@ -7,7 +7,8 @@ export const environment = {
     urlApi:"/",
     pusherKey: '2b34facefc03de20b0d2',
     pusherCluster:'mt1',
-    pusherAppId:'2122478'
+    pusherAppId:'2122478',
+    pusherUrlApi:"/",
 };
 
 /*
