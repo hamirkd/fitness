@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
 import { SeanceService } from 'app/core/services/seance.service';
 
 @Component({
@@ -14,10 +15,20 @@ export class QrcodeSeanceParticipationComponent implements OnInit {
   seanceForm: FormGroup;
   isLoading = false;
   abonneInfo: any = null;
+  caissierId: string;
+  idUnique: string;
   constructor(
     private formBuilder: FormBuilder,
     private seanceService: SeanceService,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private route: ActivatedRoute) {
+
+      route.params.subscribe((d) => {
+        console.log(d)
+        this.caissierId = d.caissierId;
+        this.idUnique = d.id;
+    });
+     }
 
     ngOnInit(): void {
       this.initForm();
@@ -25,7 +36,9 @@ export class QrcodeSeanceParticipationComponent implements OnInit {
   
     initForm(): void {
       this.seanceForm = this.formBuilder.group({
-        telephone: ['', [Validators.required, Validators.minLength(8)]]
+        telephone: ['74000000', [Validators.required, Validators.minLength(8)]],
+        idUnique: [this.idUnique],
+        caissierId: [this.caissierId]
       });
     }
   
@@ -37,9 +50,9 @@ export class QrcodeSeanceParticipationComponent implements OnInit {
       this.isLoading = true;
       this.seanceForm.disable();
   
-      const telephone = this.seanceForm.get('telephone')?.value;
+      const data = this.seanceForm.value;
   
-      this.seanceService.participer(telephone).subscribe({
+      this.seanceService.participer(data).subscribe({
         next: (response: any) => {
           this.isLoading = false;
           this.seanceForm.enable();

@@ -24,3 +24,28 @@ layout {
         }
     }
 }
+.screen-container {
+    transition: background-color 0.2s ease;
+  }
+  
+  /* OK → Vert 3 fois */
+  .blink-ok {
+    animation: blinkGreen 0.4s ease-in-out 3;
+  }
+  
+  /* KO → Rouge 2 fois */
+  .blink-ko {
+    animation: blinkRed 0.4s ease-in-out 2;
+  }
+  
+  @keyframes blinkGreen {
+    0%   { background-color: #28a745; }
+    50%  { background-color: white; }
+    100% { background-color: #28a745; }
+  }
+  
+  @keyframes blinkRed {
+    0%   { background-color: #dc3545; }
+    50%  { background-color: white; }
+    100% { background-color: #dc3545; }
+  }

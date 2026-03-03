@@ -5,8 +5,9 @@
 export const environment = {
     production: false,
     urlApi:"/",
-    pusherKey: 'app-key',
+    pusherKey: '2b34facefc03de20b0d2',
     pusherCluster:'mt1',
+    pusherAppId:'2122478'
 };
 
 /*

@@ -28,7 +28,7 @@ export class SeanceService {
     get(id): Observable<Seance> {
         return this.apiService.get('api/seance/' + id);
     }
-    participer(telephone) : Observable<Seance> {
-        return this.apiService.post('web/participe-seance', {telephone: telephone});
+    participer(data : any) : Observable<Seance> {
+        return this.apiService.post('web/participe-seance', data);
     }
 }

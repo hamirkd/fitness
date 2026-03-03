@@ -50,6 +50,7 @@ export class AddAbonneComponent implements OnInit {
         observation:[this.abonne.observation],
         cnib:[this.abonne.cnib],
         lieunais:[this.abonne.lieunais],
+        age:[this.abonne.age],
     });
     }
 

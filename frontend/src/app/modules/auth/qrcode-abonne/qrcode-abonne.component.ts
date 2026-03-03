@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AbonneService } from 'app/core/services/abonne.service';
@@ -11,9 +11,11 @@ import { AbonneService } from 'app/core/services/abonne.service';
 })
 export class QrCodeAbonneComponent implements OnInit, OnDestroy
 {
+    @Input() fullScrean = true;
     svgContent!: SafeHtml;
     activation = false;
     private refreshTimer: any;
+
 
     constructor(
         private api: AbonneService,

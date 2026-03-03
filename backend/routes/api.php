@@ -2,10 +2,13 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Broadcast;
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PasswordResetController; 
 use App\Http\Controllers\TarifController;
 use App\Http\Controllers\VersementController;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +24,32 @@ use App\Http\Controllers\VersementController;
 Route::post('/password-forget', [PasswordResetController::class, 'generate_password_init_token']);
 Route::post('/password-verify', [PasswordResetController::class, 'verif_token_enabled_to_init_password']);
 Route::post('/password-init', [PasswordResetController::class, 'reset_password_init']);
+Broadcast::routes(['middleware' => ['auth:api']]);
+// Broadcast::channel('fitness-checkin', function ($user) {
+//     // Vérifie si l'utilisateur a le droit d'écouter ce canal
+//     // Par exemple, vérifier si c'est une caissière ou un admin
+//     // return $user->role === 'caissiere' || $user->role === 'admin';
+//     Log::info('Tentative d\'accès au canal fitness-checkin', [
+//         'user_id' => $user ? $user->id : null,
+//         'user_role' => $user ? $user->role : null,
+//         'authenticated' => auth()->check(),
+//         'guard' => auth()->getDefaultDriver()
+//     ]);
+//     return true;
+// });
+
+Broadcast::channel('fitness-checkin.{caissiereId}', function ($user, $caissiereId) {
+
+    Log::info('Tentative d\'accès au canal fitness-checkin', [
+        'user_id' => $user ? $user->id : null,
+        'user_role' => $user ? $user->role : null,
+        'authenticated' => auth()->check(),
+        'guard' => auth()->getDefaultDriver()
+    ]);
+
+    return (int) $user->id === (int) $caissiereId;
+});
+
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'

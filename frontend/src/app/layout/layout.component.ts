@@ -12,6 +12,7 @@ import { AppConfig, Scheme, Theme } from 'app/core/config/app.config';
 import { MatDialog } from '@angular/material/dialog';
 import { EchoService } from 'app/core/services/echo.service';
 import { UserService } from 'app/core/user/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector     : 'layout',
@@ -44,7 +45,8 @@ export class LayoutComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         private _userService:UserService,
         private _matDialog: MatDialog,
-        private echoService: EchoService
+        private echoService: EchoService,
+        private _snackBar: MatSnackBar
     )
     {
     }
@@ -124,17 +126,48 @@ export class LayoutComponent implements OnInit, OnDestroy
     
         this._userService.user$.subscribe(user=>{
           this.currentUser=user;
+          const caissiereId = 3; // id de la caissière connectée
+          this.echoService.init(user.id);
+          console.log(this.echoService.echo)
           this.echoService.echo
-          .channel('fitness-checkin')
+          .private('fitness-checkin.' + user.id)
           .listen('.abonne.checked', (e: any) => {
-            this.notifications.unshift(e.payload);
-            this.playSound(e.payload.status);
+            console.log(e)
+            this.playSound(e.payload);
           });
+
         });
       }
-      playSound(status: string) {
-        const audio = new Audio(status === 'OK' ? 'assets/ok.mp3' : 'assets/ko.mp3');
-        audio.play();
+      screenClass = '';
+      
+      playSound(data : {status: string, message}) {
+        // const audio = new Audio(status === 'OK' ? 'assets/ok.mp3' : 'assets/ko.mp3');
+        // audio.play();
+        
+        if (data.status === 'OK') {
+            this.screenClass = 'blink-ok';
+            this._snackBar.open(data.message, 'OK', {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              duration: 5000,
+              panelClass: ['snackbar-success']
+            });
+          }
+        
+          if (data.status === 'KO') {
+            this.screenClass = 'blink-ko';
+            this._snackBar.open(data.message, 'Erreur', {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              duration: 5000,
+              panelClass: ['snackbar-error']
+            });
+          }
+        
+          // retirer la classe après animation
+          setTimeout(() => {
+            this.screenClass = '';
+          }, 2000);
       }
 
     /**

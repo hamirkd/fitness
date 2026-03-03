@@ -27,12 +27,13 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this._userService.user$.subscribe(user=>{
       this.currentUser=user;
-      this.echoService.echo
-      .channel('fitness-checkin')
-      .listen('.abonne.checked', (e: any) => {
-        this.notifications.unshift(e.payload);
-        this.playSound(e.payload.status);
-      });
+      // this.echoService.echo
+      // .private('fitness-checkin')
+      // .listen('.abonne.checked', (e: any) => {
+      //   console.log('e',e)
+      //   this.notifications.unshift(e.abonne);
+      //   this.playSound(e.status);
+      // });
     });
   }
   playSound(status: string) {

@@ -1,46 +1,45 @@
 <!-- ----------------------------------------------------------------------------------------------------- -->
 <!-- Empty layout -->
 <!-- ----------------------------------------------------------------------------------------------------- -->
-<empty-layout *ngIf="layout === 'empty'"></empty-layout>
+<empty-layout *ngIf="layout === 'empty'" [ngClass]="screenClass" class="screen-container"></empty-layout>
 
 <!-- ----------------------------------------------------------------------------------------------------- -->
 <!-- Layouts with horizontal navigation -->
 <!-- ----------------------------------------------------------------------------------------------------- -->
 
 <!-- Centered -->
-<centered-layout *ngIf="layout === 'centered'"></centered-layout>
+<centered-layout *ngIf="layout === 'centered'" [ngClass]="screenClass" class="screen-container"></centered-layout>
 
 <!-- Enterprise -->
-<enterprise-layout *ngIf="layout === 'enterprise'"></enterprise-layout>
+<enterprise-layout *ngIf="layout === 'enterprise'" [ngClass]="screenClass" class="screen-container"></enterprise-layout>
 
 <!-- Material -->
-<material-layout *ngIf="layout === 'material'"></material-layout>
+<material-layout *ngIf="layout === 'material'" [ngClass]="screenClass" class="screen-container"></material-layout>
 
 <!-- Modern -->
-<modern-layout *ngIf="layout === 'modern'"></modern-layout>
+<modern-layout *ngIf="layout === 'modern'" [ngClass]="screenClass" class="screen-container"></modern-layout>
 
 <!-- ----------------------------------------------------------------------------------------------------- -->
 <!-- Layouts with vertical navigation -->
 <!-- ----------------------------------------------------------------------------------------------------- -->
 
 <!-- Classic -->
-<classic-layout *ngIf="layout === 'classic'"></classic-layout>
+<classic-layout *ngIf="layout === 'classic'" [ngClass]="screenClass" class="screen-container"></classic-layout>
 
 <!-- Classy -->
-<classy-layout *ngIf="layout === 'classy'"></classy-layout>
+<classy-layout *ngIf="layout === 'classy'" [ngClass]="screenClass" class="screen-container"></classy-layout>
 
 <!-- Compact -->
-<compact-layout *ngIf="layout === 'compact'"></compact-layout>
+<compact-layout *ngIf="layout === 'compact'" [ngClass]="screenClass" class="screen-container"></compact-layout>
 
 <!-- Dense -->
-<dense-layout *ngIf="layout === 'dense'"></dense-layout>
+<dense-layout *ngIf="layout === 'dense'" [ngClass]="screenClass" class="screen-container"></dense-layout>
 
 <!-- Futuristic -->
-<futuristic-layout *ngIf="layout === 'futuristic'"></futuristic-layout>
+<futuristic-layout *ngIf="layout === 'futuristic'" [ngClass]="screenClass" class="screen-container"></futuristic-layout>
 
 <!-- Thin -->
-<thin-layout *ngIf="layout === 'thin'"></thin-layout>
-
+<thin-layout *ngIf="layout === 'thin'" [ngClass]="screenClass" class="screen-container"></thin-layout>
 <!-- ----------------------------------------------------------------------------------------------------- -->
 <!-- Settings drawer - Remove this to remove the drawer and its button -->
 <!-- ----------------------------------------------------------------------------------------------------- -->

@@ -10,9 +10,16 @@ export const qrCodeAbonneRoutes: Route[] = [
     },{
         path     : 'participer/:id',
         component: QrcodeSeanceParticipationComponent
+    },{
+        path     : 'participer/:id/:caissierId',
+        component: QrcodeSeanceParticipationComponent
     },
     {
         path     : 'qrCode',
+        component: QrCodeAbonneComponent
+    },
+    {
+        path     : 'qr-code',
         component: QrCodeAbonneComponent
     },
 ];

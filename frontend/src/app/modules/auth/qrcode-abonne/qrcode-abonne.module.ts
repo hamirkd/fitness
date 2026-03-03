@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { FuseFullscreenModule } from '@fuse/components/fullscreen';
 
 @NgModule({
     declarations: [
@@ -20,7 +21,7 @@ import { MatInputModule } from '@angular/material/input';
         FormsModule,
         ReactiveFormsModule,
         MatButtonModule, MatFormFieldModule,
-        MatInputModule,
+        MatInputModule,FuseFullscreenModule
         
     ],
     exports: [QrCodeAbonneComponent, QrcodeSeanceParticipationComponent]

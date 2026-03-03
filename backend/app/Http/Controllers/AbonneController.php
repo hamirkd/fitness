@@ -27,9 +27,18 @@ class AbonneController extends Controller
      */
     public function store(Request $request)
     {
-        $abonne = Abonne::where('telephone', $request->telephone)
-                ->orWhere('email', $request->email)
-                ->first();
+        $abonne = null;
+        if ($request->telephone && $request->email) {
+            $abonne = Abonne::where('telephone', $request->telephone)
+            ->orWhere('email', $request->email)
+            ->first();
+        } else if ($request->telephone) {
+            $abonne = Abonne::where('telephone', $request->telephone)->first();
+        } else if ($request->email) {
+            $abonne = Abonne::where('email', $request->email)->first();
+        }
+        
+        
         if ($abonne) {
             return response()->json([
                 'message' => "Ce numéro existe déjà pour l'abonné {$abonne->nom} {$abonne->prenom}",

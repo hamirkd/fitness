@@ -6,6 +6,7 @@ use App\Models\Seance;
 use App\Models\Abonne;
 use App\Models\Abonnement;
 use App\Models\AbonnementAll;
+use App\Events\AbonneChecked;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -26,6 +27,7 @@ class SeanceController extends Controller
     {
         try {
             DB::beginTransaction();
+            $caissierId = $request->caissierId;
     
             // Récupérer l'abonné
             $abonne = Abonne::where('telephone', $request->telephone)
@@ -103,7 +105,9 @@ class SeanceController extends Controller
                 'data' => [
                     'abonne' => $abonne,
                     'seance_creee' => $seanceCreee
-                ]
+                ],
+                'abonne' => $abonne,
+                'status' => $seanceCreee ? 'OK' : 'KO',
             ];
     
             if ($seanceCreee && $abonnementUtilise) {
@@ -114,6 +118,8 @@ class SeanceController extends Controller
                     $response['data']['seance'] = $seance;
                 }
             }
+            // event(new AbonneChecked($payload, $caissierId));
+            event(new AbonneChecked($response, $caissierId));
     
             return response()->json($response, $seanceCreee ? 200 : 404);
     

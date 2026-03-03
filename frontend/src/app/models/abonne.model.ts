@@ -8,9 +8,9 @@ export class Abonne {
     email:string;
     datenais:any;
     observation:any;    
-    numerocompteur:string;
     cnib:string;
     lieunais: string;
+    age: string;
 
     
     updated_by:any;
@@ -32,6 +32,7 @@ export class Abonne {
         this.observation = client.observation;
         this.cnib = client.cnib;
         this.file_name = client.file_name;
+        this.age = client.age;
         this.updated_by = client.updated_by;
         this.created_by = client.created_by;
         this.updated_at = client.updated_at;
