@@ -11,8 +11,8 @@ import FileSaver from 'file-saver';
 import { AbonnementMotifAnnulationComponent } from './abonnement-motif-annulation/abonnement-motif-annulation.component';
 import { AbonnementService } from 'app/core/services/abonnement.service';
 import { Abonnement } from 'app/models/abonnement.model';
-import { AddAbonneComponent } from '../../abonne/add-abonne/add-abonne.component';
 import { AddAbonnementComponent } from '../add-abonnement/add-abonnement.component';
+import { convertToCSV } from 'app/core/utils';
 
 @Component({
     selector: 'app-abonnement',
@@ -185,21 +185,9 @@ export class AbonnementComponent implements OnInit {
         this.abonnements.forEach(o=>listeAImprimer.push({matricule:o['matricule'],nomprenom:o['nomprenom'],
         montant:o['montant'],dateversement:o['dateversement']}));
   
-        var blob = new Blob([this.convertToCSV(listeAImprimer)], {type: "text/csv;charset=utf-8"});
+        var blob = new Blob([convertToCSV(listeAImprimer)], {type: "text/csv;charset=utf-8"});
         FileSaver.saveAs(blob,"paiement-liste.csv");
     }
-
-    convertToCSV(arr) {
-        arr.forEach(item=>{
-            Object.keys(arr[0]).forEach(champ => {
-                item[champ]=item[champ]?item[champ].toString().trim():item[champ]
-              });
-          })
-          const array = [Object.keys(arr[0])].concat(arr)
-          return array.map(it => {
-              return Object.values(it).join(';').toString()
-          }).join('\n')
-      }
 
       ajouterButton(){
 

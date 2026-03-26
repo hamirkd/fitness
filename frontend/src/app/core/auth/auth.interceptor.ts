@@ -50,7 +50,7 @@ export class AuthInterceptor implements HttpInterceptor
                 { 
                     // Sign out 
 
-                    this._authService.signOut();
+                    // this._authService.signOut();
                     console.log(error)
                     // Reload the app
                     location.reload();

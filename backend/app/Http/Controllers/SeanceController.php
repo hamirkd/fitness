@@ -264,5 +264,45 @@ class SeanceController extends Controller
             ->where('etat', '!=', 'ENCOURS')
             ->update(['etat' => 'ENCOURS']);
     }
+    /**
+     * Récupère la liste des séances en fonction des critères fournis.
+     *
+     * Cette méthode applique des filtres dynamiques sur les champs :
+     * - abonne_id
+     * - abonnement_id
+     * - date_seance
+     *
+     * Les résultats sont triés par ordre décroissant (id DESC)
+     * et paginés pour optimiser les performances.
+     *
+     * @param \Illuminate\Http\Request $request Objet contenant les critères de recherche
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator Liste paginée des séances
+     *
+     * @example
+     * // Exemple d'utilisation :
+     * $seances = $this->findSeanceByCriteria($request);
+     *
+     * // Paramètres possibles dans la requête :
+     * // - abonne_id
+     * // - abonnement_id
+     * // - date_seance
+     */
+    public function findSeanceByCriteria(Request $request) {
+        $seances = Seance::query();
+        if ($request->abonne_id) {
+            $seances = $seances->where('abonne_id', $request->abonne_id);
+        }
+        if ($request->abonnement_id) {
+            $seances = $seances->where('abonnement_id', $request->abonnement_id);
+        }
+        if ($request->dateseance) {
+            $seances = $seances->where('date_seance', $request->date_seance);
+        }
+        if ($request->datedebut && $request->datefin) {
+            $seances = $seances->whereBetween('created_at', [$request['datedebut'] , $request['datefin']]);
+        }
+        return $seances->orderBy('id', 'desc')->limit(10)->get();
+    }
     
 }

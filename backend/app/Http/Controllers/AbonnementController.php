@@ -113,6 +113,34 @@ class AbonnementController extends Controller
         
         return $abonnements;
     }
+    /**
+     * Création des abonnements d'une période données.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function findByPrevision(Request $request)
+    {
+        
+        $today = Carbon::today();
+        $in7Days = Carbon::today()->addDays(7);
+        $minus7Days = Carbon::today()->subDays(7);
+
+        // $abonnements = Abonnement::query()
+        //     ->whereBetween('date_fin', [$minus7Days, $in7Days]) // 👈 intervalle 7 jours
+        //     ->orderBy('date_fin', 'asc') // 👈 les plus proches d'abord
+        //     ->limit(30)
+        //     ->get();
+        $abonnements = AbonnementAll::select('abonne_id','tarif_id','created_by', DB::raw('MAX(date_fin) as date_fin'))
+            ->whereBetween('date_fin', [$minus7Days, $in7Days])
+            ->groupBy('abonne_id') // 👈 unique par abonné
+            ->orderBy('date_fin', 'asc')
+            ->limit(30)
+            ->get();
+                
+        return $abonnements;
+    }
+    
 
 
     public function imprimer(Request $request)

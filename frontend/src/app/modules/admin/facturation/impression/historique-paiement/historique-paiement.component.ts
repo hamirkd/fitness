@@ -18,9 +18,7 @@ export class HistoriquePaiementComponent implements OnInit {
   versementDataSearch:any;//{inscription_id,annee_id,eleve,salleClasse,classe}={}
 
   dataSource: MatTableDataSource<Versement> = new MatTableDataSource();
-  constructor(
-    private _versementService: VersementsService,
-    @Inject(MAT_DIALOG_DATA) _data: any,) {
+  constructor(private _versementService: VersementsService, @Inject(MAT_DIALOG_DATA) _data: any,) {
       this.versementDataSearch = (_data.versementDataSearch); 
     }
 

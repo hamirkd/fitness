@@ -18,6 +18,7 @@ import { AbonnementService } from 'app/core/services/abonnement.service';
 import { MediaAddComponent } from '../media-add/media-add.component';
 import { AbonnementMotifAnnulationComponent } from '../../facturation/consultation/abonnement-motif-annulation/abonnement-motif-annulation.component';
 import { AddAbonnementComponent } from '../../facturation/add-abonnement/add-abonnement.component';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-detail-abonne',
@@ -60,6 +61,7 @@ export class DetailAbonneComponent implements OnInit {
     urlForBackend;
     montant: { nonpaye: number; paye: number; } = {nonpaye:0, paye:0};
     actualiser = {};
+    @ViewChild(MatPaginator) paginatorAbonnement!: MatPaginator;
     constructor(
         private _abonneService: AbonneService,
         private _matDialog: MatDialog,
@@ -343,6 +345,7 @@ export class DetailAbonneComponent implements OnInit {
                     listeAbonnement.push(new Abonnement(abonnement));
                  });
                  this.dataSourceAbonnement.data = listeAbonnement;
+                 this.dataSourceAbonnement.paginator = this.paginatorAbonnement;
             });
     }
  

@@ -31,4 +31,7 @@ export class SeanceService {
     participer(data : any) : Observable<Seance> {
         return this.apiService.post('web/participe-seance', data);
     }
+    findBy(data: any) : Observable<Seance[]> {
+        return this.apiService.post('api/seance/findSeanceByCriteria', data);
+    }
 }

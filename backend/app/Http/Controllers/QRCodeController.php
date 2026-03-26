@@ -19,6 +19,9 @@ class QRCodeController extends Controller
        //return QrCode::SMS('121-222-6666', 'Body of the message');
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
         $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'];
+        if ($host === 'localhost:4200') {
+            $host = $value = env('HOST');
+        }
         $server_url = $protocol . '://' . $host . "/backend/public/index.php/web/qr-code/" .uniqid();
         $unique = uniqid();
         if (auth()->check()) {

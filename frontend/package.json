@@ -7,7 +7,7 @@
     "private": true,
     "scripts": {
         "ng": "ng",
-        "start": "ng serve",
+        "start": "ng serve --host=0.0.0.0",
         "prod": "ng serve --open",
         "dev": "ng serve --open",
         "build": "ng build",

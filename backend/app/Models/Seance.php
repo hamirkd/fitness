@@ -23,9 +23,19 @@ class Seance extends Model
         'updated_at',
         'created_at',
     ];
-    protected $casts = [
-        'date_seance' => 'date',
-        'heure_debut' => 'datetime',
-        'heure_fin' => 'datetime'
-    ];
+    
+    // protected $casts = [
+    //     'date_seance' => 'date',
+    //     'heure_debut' => 'datetime',
+    //     'heure_fin' => 'datetime'
+    // ];
+    public function getAbonneAttribute()
+    {
+        return Abonne::find($this->abonne_id);
+    }
+    public function getAbonnementAttribute()
+    {
+        return Abonnement::find($this->abonnement_id);
+    }
+    protected $appends = ['abonne','abonnement'];
 }

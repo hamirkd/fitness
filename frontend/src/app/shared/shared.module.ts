@@ -29,13 +29,42 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { QrCodeAbonneModule } from 'app/modules/auth/qrcode-abonne/qrcode-abonne.module';
+import { AbonnementPrevisionComponent } from 'app/modules/admin/facturation/abonnement-prevision/abonnement-prevision.component';
+import { RouterModule } from '@angular/router';
+import { MySeanceComponent } from 'app/modules/admin/seance/my-seance/my-seance.component';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         ReactiveFormsModule, MatButtonModule,
-        QrCodeAbonneModule
+        QrCodeAbonneModule,
+        MatMenuModule,         
+        MatButtonToggleModule,
+        MatDividerModule,
+        MatIconModule,
+        MatProgressBarModule,
+        MatRippleModule,
+        MatSidenavModule,
+        MatSortModule,
+        MatTableModule,
+        MatTabsModule,
+        NgApexchartsModule,
+        TranslocoModule,
+        MatPaginatorModule,
+        MatCheckboxModule,
+        MatTooltipModule,
+        MatToolbarModule,
+        FuseCardModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        MatAutocompleteModule,
+        MatInputModule,
+        MatDialogModule,
+        MatOptionModule,
+        MatSelectModule,MatSnackBarModule,
+        MatNativeDateModule, MatMomentDateModule, TranslateModule,
+        RouterModule
     ],
     exports: [
         CommonModule,
@@ -68,8 +97,11 @@ import { QrCodeAbonneModule } from 'app/modules/auth/qrcode-abonne/qrcode-abonne
         MatSelectModule,MatSnackBarModule,
         MatNativeDateModule, MatMomentDateModule, TranslateModule,
         QrCodeAbonneModule,
+        AbonnementPrevisionComponent,
+        MySeanceComponent
 
     ],
+    declarations: [AbonnementPrevisionComponent, MySeanceComponent],
     providers: [TranslateService]
 })
 export class SharedModule

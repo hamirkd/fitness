@@ -9,6 +9,7 @@ import { AbonnementComponent } from './consultation/abonnement.component';
 import { AddAbonnementComponent } from './add-abonnement/add-abonnement.component';
 import { AbonnementMotifAnnulationComponent } from './consultation/abonnement-motif-annulation/abonnement-motif-annulation.component';
 import { RecapAbonnementComponent } from './add-abonnement/recap-abonnement.component';
+import { AbonnementPrevisionComponent } from './abonnement-prevision/abonnement-prevision.component';
 
 
 const routes: Routes = [
@@ -16,7 +17,9 @@ const routes: Routes = [
   { path: 'consultation', component: AbonnementComponent },
   { path: 'tarif', component: TarifComponent },
   { path: 'tarif-add', component: AddTarifComponent },
-  { path: 'nouveau', component: AddAbonnementComponent }
+  { path: 'nouveau', component: AddAbonnementComponent },
+  { path: 'prevision', component: AbonnementPrevisionComponent },
+  
 ];
 
 @NgModule({

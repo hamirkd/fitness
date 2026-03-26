@@ -56,5 +56,8 @@ export class AbonnementService {
     imprimerAbonnement(search): Observable<Blob | MediaSource> {
       return this.apiService.post2('api/abonnement/imprimer', search);
     }
+    findByPrevision(data):Observable<Abonnement[]>{
+      return this.apiService.post('api/abonnement/findByPrevision', data);
+    }
 
 }

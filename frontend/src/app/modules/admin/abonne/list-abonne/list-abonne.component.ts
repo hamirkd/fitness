@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import * as FileSaver from 'file-saver';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { convertToCSV } from 'app/core/utils';
 @Component({
     selector: 'app-list-abonne',
     templateUrl: './list-abonne.component.html',
@@ -112,21 +113,9 @@ export class ListAbonneComponent implements OnInit,AfterViewInit {
         return;
         }
   
-       // var blob = new Blob([this.convertToCSV(this.dataSource.data)], {type: "text/csv;charset=iso-8859-1"});
-        var blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), new TextEncoder().encode(this.convertToCSV(this.dataSource.data))], { type: "text/csv;charset=iso-8859-1" });
+        var blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), new TextEncoder().encode(convertToCSV(this.dataSource.data))], { type: "text/csv;charset=iso-8859-1" });
 
         FileSaver.saveAs(blob, "Liste du abonne" +".csv");
-      }
-      convertToCSV(arr) {
-        arr.forEach(item=>{
-            Object.keys(arr[0]).forEach(champ => {
-                item[champ]=item[champ]?item[champ].toString().trim():item[champ]
-              });
-          })
-          const array = [Object.keys(arr[0])].concat(arr)
-          return array.map(it => {
-              return Object.values(it).join(';').toString()
-          }).join('\n')
       }
     supprimer(element){
         this.dialogRef = this._fuseConfirmationService.open({

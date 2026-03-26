@@ -79,6 +79,8 @@ Route::middleware('auth:api')->group(function() {
     Route::post('abonnement/restore', 'App\Http\Controllers\AbonnementController@restore');
     Route::post('abonnement/nouvelle', 'App\Http\Controllers\AbonnementController@nouvelle');
     Route::post('abonnement/findBy', 'App\Http\Controllers\AbonnementController@findBy');
+    Route::post('abonnement/findByPrevision', 'App\Http\Controllers\AbonnementController@findByPrevision');
+    
     Route::post('abonnement/addMost', 'App\Http\Controllers\AbonnementController@addMost');
     Route::post('abonnement/imprimer', 'App\Http\Controllers\AbonnementController@imprimer');
     Route::post('abonnement/paye', 'App\Http\Controllers\AbonnementController@paye');
@@ -98,5 +100,7 @@ Route::middleware('auth:api')->group(function() {
     Route::get('utilisateur/find/all', 'App\Http\Controllers\UtilisateurController@findAll');
     Route::get('utilisateur/restore/{id}', 'App\Http\Controllers\UtilisateurController@restore');
     Route::get('utilisateur/passeWord/{id}', 'App\Http\Controllers\UtilisateurController@passeWord');
+
+    Route::post('seance/findSeanceByCriteria', 'App\Http\Controllers\SeanceController@findSeanceByCriteria');
 
 });

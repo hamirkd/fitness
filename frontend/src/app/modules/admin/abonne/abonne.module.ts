@@ -9,6 +9,7 @@ import { ListAbonneComponent } from './list-abonne/list-abonne.component';
 import { DetailAbonneComponent } from './detail-abonne/detail-abonne.component';
 import { GeolocationComponent } from './geolocation/geolocation.component';
 import { MediaAddComponent } from './media-add/media-add.component';
+import { SeanceModule } from '../seance/seance.module';
 
 
 const routes: Routes = [

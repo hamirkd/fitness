@@ -22,6 +22,8 @@ export class Abonnement {
     cancelled_at: string;
     mode_paiement: string;
     date_pause: string;
+    type_abonnement: string;
+
 
     constructor(abonnement:any){
         this.id = abonnement.id;
@@ -38,11 +40,17 @@ export class Abonnement {
         this.abonne = abonnement.abonne;
         this.etat = abonnement.etat;
         this.tarif = abonnement.tarif;
-        this.nomprenom = abonnement.nom + ' ' + abonnement.prenom;
+        if (abonnement.abonne) {
+            this.nomprenom = abonnement.abonne.nom + ' ' + abonnement.abonne.prenom;
+        } else {
+            this.nomprenom = abonnement.nom + ' ' + abonnement.prenom;
+        }
+        
         this.updated_by = abonnement.updated_by;
         this.created_by = abonnement.created;   
         this.cancelled_at = abonnement.cancelled_at;   
         this.mode_paiement = abonnement.mode_paiement;   
         this.date_pause = abonnement.date_pause;
+        this.type_abonnement = abonnement.tarif?.libelle || '';
     }
 }

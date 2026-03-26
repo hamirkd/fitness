@@ -24,11 +24,19 @@ export const defaultNavigation: FuseNavigationItem[] = [
         roles: 'USER,ADMIN'
     },
     {
-        id: 'client',
+        id: 'abonne',
         title: 'Abonné',
         type: 'basic',
         icon: 'iconsmind:business_manwoman',
         link: '/abonnes',
+        roles: 'USER,ADMIN,SCOLARITE,DIRECTEUR,SECRETAIRE'
+    },
+    {
+        id: 'seance',
+        title: 'Séance',
+        type: 'basic',
+        icon: 'iconsmind:business_manwoman',
+        link: '/seance',
         roles: 'USER,ADMIN,SCOLARITE,DIRECTEUR,SECRETAIRE'
     },
     {
